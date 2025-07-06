@@ -9,7 +9,7 @@
     "scope-enum": [
       1,
       "always",
-      ["commitlint"]
+      ["commitlint", "package.json", "common"]
     ]
   }
 }
