@@ -1,0 +1,77 @@
+import { applyDecorators } from '@nestjs/common';
+import { Transform } from 'class-transformer';
+import { IsIn, IsOptional, IsString, Length, Matches } from 'class-validator';
+
+interface StringValidatorOptions {
+  trim?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: RegExp;
+  enum?: string[];
+  optional?: boolean;
+  message?: string;
+}
+
+export function StringValidator(options: StringValidatorOptions = {}) {
+  const decorators: PropertyDecorator[] = [];
+
+  // 1) 값 가공(transform)
+  if (options.trim) {
+    decorators.push(
+      Transform(({ value }) =>
+        typeof value === 'string' ? value.trim() : value,
+      ),
+    );
+  }
+
+  // 2) optional 처리
+  if (options.optional) {
+    decorators.push(IsOptional());
+  }
+
+  // 3) 기본 문자열 검사
+  decorators.push(
+    IsString({ message: options.message ?? '$property must be a string' }),
+  );
+
+  // 4) 길이 제한
+  if (
+    typeof options.minLength === 'number' ||
+    typeof options.maxLength === 'number'
+  ) {
+    decorators.push(
+      Length(
+        options.minLength ?? 0,
+        options.maxLength ?? Number.MAX_SAFE_INTEGER,
+        {
+          message:
+            options.message ??
+            `$property must be between ${options.minLength} and ${options.maxLength} characters`,
+        },
+      ),
+    );
+  }
+
+  // 5) 패턴 검사
+  if (options.pattern) {
+    decorators.push(
+      Matches(options.pattern, {
+        message:
+          options.message ?? `$property must match pattern ${options.pattern}`,
+      }),
+    );
+  }
+
+  // 6) enum(허용값) 검사
+  if (Array.isArray(options.enum)) {
+    decorators.push(
+      IsIn(options.enum, {
+        message:
+          options.message ??
+          `$property must be one of [${options.enum.join(', ')}]`,
+      }),
+    );
+  }
+
+  return applyDecorators(...decorators);
+}
