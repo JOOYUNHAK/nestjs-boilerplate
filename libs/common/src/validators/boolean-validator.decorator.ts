@@ -4,6 +4,7 @@ import { IsBoolean, IsOptional } from 'class-validator';
 export interface BooleanValidatorOptions {
   optional?: boolean;
   message?: string;
+  each?: boolean;
 }
 
 export function BooleanValidator(
@@ -15,9 +16,14 @@ export function BooleanValidator(
     decorators.push(IsOptional());
   }
 
-  decorators.push(
-    IsBoolean({ message: options.message ?? '$property must be a boolean' }),
-  );
+  const eachOption = options.each ? true : false;
+  const message =
+    options.message ??
+    (eachOption
+      ? '$property each elements must be a boolean'
+      : '$property must be a boolean');
+
+  decorators.push(IsBoolean({ each: eachOption, message }));
 
   return applyDecorators(...decorators);
 }

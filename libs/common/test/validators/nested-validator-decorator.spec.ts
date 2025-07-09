@@ -19,7 +19,7 @@ class NestedStrTestDTO {
 }
 
 class TestDTO {
-  @NestedValidator(() => NestedStrTestDTO)
+  @NestedValidator(() => NestedStrTestDTO, { each: true })
   nested: NestedStrTestDTO[];
 }
 

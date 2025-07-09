@@ -10,6 +10,7 @@ interface StringValidatorOptions {
   enum?: string[];
   optional?: boolean;
   message?: string;
+  each?: boolean;
 }
 
 export function StringValidator(options: StringValidatorOptions = {}) {
@@ -29,9 +30,17 @@ export function StringValidator(options: StringValidatorOptions = {}) {
     decorators.push(IsOptional());
   }
 
+  const eachOption = options.each ? true : false;
+
   // 3) 기본 문자열 검사
   decorators.push(
-    IsString({ message: options.message ?? '$property must be a string' }),
+    IsString({
+      message:
+        options.message ??
+        (eachOption
+          ? '$property each elements must be a string'
+          : '$property must be a string'),
+    }),
   );
 
   // 4) 길이 제한
@@ -46,7 +55,9 @@ export function StringValidator(options: StringValidatorOptions = {}) {
         {
           message:
             options.message ??
-            `$property must be between ${options.minLength} and ${options.maxLength} characters`,
+            (eachOption
+              ? `$property each elements must be between ${options.minLength} and ${options.maxLength} characters`
+              : `$property must be between ${options.minLength} and ${options.maxLength} characters`),
         },
       ),
     );
@@ -57,7 +68,10 @@ export function StringValidator(options: StringValidatorOptions = {}) {
     decorators.push(
       Matches(options.pattern, {
         message:
-          options.message ?? `$property must match pattern ${options.pattern}`,
+          options.message ??
+          (eachOption
+            ? `$property each elements must match pattern ${options.pattern}`
+            : `$property must match pattern ${options.pattern}`),
       }),
     );
   }
@@ -68,7 +82,9 @@ export function StringValidator(options: StringValidatorOptions = {}) {
       IsIn(options.enum, {
         message:
           options.message ??
-          `$property must be one of [${options.enum.join(', ')}]`,
+          (eachOption
+            ? `$property each elements must be one of [${options.enum.join(', ')}]`
+            : `$property must be one of [${options.enum.join(', ')}]`),
       }),
     );
   }

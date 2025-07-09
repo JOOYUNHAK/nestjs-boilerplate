@@ -1,18 +1,19 @@
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { applyDecorators } from '@nestjs/common';
 
-export function NestedValidator(typeFn: () => Function): PropertyDecorator {
-  return function (target: object, propertyKey: string | symbol) {
-    const designType = Reflect.getMetadata(
-      'design:type',
-      target,
-      propertyKey as string,
-    );
+interface NestedValidatorOptions {
+  each?: boolean;
+}
 
-    designType === Array
-      ? ValidateNested({ each: true })(target, propertyKey)
-      : ValidateNested()(target, propertyKey);
+export function NestedValidator(
+  typeFn: () => Function,
+  options: NestedValidatorOptions = {},
+): PropertyDecorator {
+  const decorators: PropertyDecorator[] = [];
 
-    Type(typeFn)(target, propertyKey as string);
-  };
+  decorators.push(ValidateNested({ each: options.each ? true : false }));
+  decorators.push(Type(typeFn));
+
+  return applyDecorators(...decorators);
 }
