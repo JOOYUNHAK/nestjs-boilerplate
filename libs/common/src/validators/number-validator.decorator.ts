@@ -68,6 +68,7 @@ export function NumberValidator(
   if (options.positive) {
     decorators.push(
       Min(1, {
+        each: eachOption,
         message:
           options.message ??
           (eachOption
@@ -81,6 +82,7 @@ export function NumberValidator(
   if (options.min != null) {
     decorators.push(
       Min(options.min, {
+        each: eachOption,
         message:
           options.message ??
           (eachOption
@@ -92,6 +94,7 @@ export function NumberValidator(
   if (options.max != null) {
     decorators.push(
       Max(options.max, {
+        each: eachOption,
         message:
           options.message ??
           (eachOption
@@ -103,3 +106,5 @@ export function NumberValidator(
 
   return applyDecorators(...decorators);
 }
+
+NumberValidator.__isPrimitiveValidator = true as const;

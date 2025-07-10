@@ -27,3 +27,5 @@ export function BooleanValidator(
 
   return applyDecorators(...decorators);
 }
+
+BooleanValidator.__isPrimitiveValidator = true as const;

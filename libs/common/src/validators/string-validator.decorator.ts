@@ -35,6 +35,7 @@ export function StringValidator(options: StringValidatorOptions = {}) {
   // 3) 기본 문자열 검사
   decorators.push(
     IsString({
+      each: eachOption,
       message:
         options.message ??
         (eachOption
@@ -53,6 +54,7 @@ export function StringValidator(options: StringValidatorOptions = {}) {
         options.minLength ?? 0,
         options.maxLength ?? Number.MAX_SAFE_INTEGER,
         {
+          each: eachOption,
           message:
             options.message ??
             (eachOption
@@ -67,6 +69,7 @@ export function StringValidator(options: StringValidatorOptions = {}) {
   if (options.pattern) {
     decorators.push(
       Matches(options.pattern, {
+        each: eachOption,
         message:
           options.message ??
           (eachOption
@@ -80,6 +83,7 @@ export function StringValidator(options: StringValidatorOptions = {}) {
   if (Array.isArray(options.enum)) {
     decorators.push(
       IsIn(options.enum, {
+        each: eachOption,
         message:
           options.message ??
           (eachOption
@@ -91,3 +95,5 @@ export function StringValidator(options: StringValidatorOptions = {}) {
 
   return applyDecorators(...decorators);
 }
+
+StringValidator.__isPrimitiveValidator = true as const;

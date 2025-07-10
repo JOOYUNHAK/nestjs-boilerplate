@@ -33,3 +33,5 @@ export function DateValidator(
 
   return applyDecorators(...decorators);
 }
+
+DateValidator.__isPrimitiveValidator = true as const;
