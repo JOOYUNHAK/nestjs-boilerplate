@@ -2,14 +2,14 @@
   "extends": ["@commitlint/config-conventional"],
   "rules": {
     "type-enum": [
-      2,
+      1,
       "always",
       ["feat", "fix", "docs", "style", "refactor", "test", "ci", "chore"]
     ],
     "scope-enum": [
-      1,
+      2,
       "always",
-      ["commitlint", "package.json", "common", "config"]
+      ["common", "config"]
     ]
   }
 }
