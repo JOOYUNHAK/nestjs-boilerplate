@@ -14,6 +14,8 @@
     "@libs/common": "<rootDir>/../libs/common/src",
     "@libs/common/(.*)": "<rootDir>/../libs/common/src/$1",
     "@libs/config": "<rootDir>/../libs/config/src",
-    "@libs/config/(.*)": "<rootDir>/../libs/config/src/$1"
+    "@libs/config/(.*)": "<rootDir>/../libs/config/src/$1",
+    "@libs/core": "<rootDir>/../libs/core/src",
+    "@libs/core/(.*)": "<rootDir>/../libs/core/src/$1"
   }
 }
