@@ -29,6 +29,12 @@
       ],
       "@libs/config/*": [
         "libs/config/src/*"
+      ],
+      "@libs/core": [
+        "libs/core/src"
+      ],
+      "@libs/core/*": [
+        "libs/core/src/*"
       ]
     }
   }

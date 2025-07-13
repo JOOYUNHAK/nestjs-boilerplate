@@ -9,7 +9,7 @@
     "scope-enum": [
       2,
       "always",
-      ["common", "config"]
+      ["common", "config", "core"]
     ]
   }
 }

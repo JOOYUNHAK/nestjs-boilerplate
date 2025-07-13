@@ -1,0 +1,27 @@
+import { AllCatchExceptionFilter, ResponseInterceptor } from '@libs/common';
+import { ClassSerializerInterceptor, Global, Module } from '@nestjs/common';
+import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
+
+@Global()
+@Module({
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllCatchExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: (reflector: Reflector) =>
+        new ClassSerializerInterceptor(reflector, {
+          enableImplicitConversion: true,
+          excludeExtraneousValues: true,
+        }),
+      inject: [Reflector],
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
+  ],
+})
+export class CoreModule {}
