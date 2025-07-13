@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { ResponseInterceptor } from './interceptor';
+import { ResponseInterceptor } from '../../common/src/interceptors';
 
 @Global()
 @Module({

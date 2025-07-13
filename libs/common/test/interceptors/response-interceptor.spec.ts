@@ -1,4 +1,4 @@
-import { ResponseInterceptor } from '@libs/core/interceptor';
+import { ResponseInterceptor } from '@libs/common/interceptors';
 import { firstValueFrom, of } from 'rxjs';
 
 describe('ResponseInterceptor Unit Test', () => {
