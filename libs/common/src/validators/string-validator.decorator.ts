@@ -7,7 +7,7 @@ interface StringValidatorOptions {
   minLength?: number;
   maxLength?: number;
   pattern?: RegExp;
-  enum?: string[];
+  enum?: Record<string, string | number>;
   optional?: boolean;
   message?: string;
   each?: boolean;
@@ -36,6 +36,7 @@ export function StringValidator(options: StringValidatorOptions = {}) {
   decorators.push(
     IsString({
       each: eachOption,
+
       message:
         options.message ??
         (eachOption
@@ -80,15 +81,19 @@ export function StringValidator(options: StringValidatorOptions = {}) {
   }
 
   // 6) enum(허용값) 검사
-  if (Array.isArray(options.enum)) {
+  if (options.enum) {
+    const enumValues = Object.values(options.enum).filter(
+      v => typeof v === 'string' || typeof v === 'number',
+    );
+
     decorators.push(
-      IsIn(options.enum, {
+      IsIn(enumValues, {
         each: eachOption,
         message:
           options.message ??
           (eachOption
-            ? `$property each elements must be one of [${options.enum.join(', ')}]`
-            : `$property must be one of [${options.enum.join(', ')}]`),
+            ? `$property each elements must be one of [${enumValues.join(', ')}]`
+            : `$property must be one of [${enumValues.join(', ')}]`),
       }),
     );
   }
