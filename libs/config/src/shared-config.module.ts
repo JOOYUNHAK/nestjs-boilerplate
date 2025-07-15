@@ -1,7 +1,6 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 
-@Global()
 @Module({})
 export class SharedConfigModule {
   static forRoot(opts: ConfigModuleOptions): DynamicModule {

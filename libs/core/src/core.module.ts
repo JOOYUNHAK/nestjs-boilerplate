@@ -1,10 +1,12 @@
 import { AllCatchExceptionFilter, ResponseInterceptor } from '@libs/common';
 import { configValidateFn, SharedConfigModule } from '@libs/config';
 import configuration from '@libs/config/configuration';
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Global, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { join } from 'path';
+import { CoreLoggerModule } from './logging';
 
+@Global()
 @Module({
   imports: [
     SharedConfigModule.forRoot({
@@ -12,6 +14,7 @@ import { join } from 'path';
       validate: configValidateFn,
       envFilePath: [join(process.cwd(), 'env', `.env.${process.env.NODE_ENV}`)],
     }),
+    CoreLoggerModule,
   ],
   providers: [
     {
@@ -32,5 +35,6 @@ import { join } from 'path';
       useClass: ResponseInterceptor,
     },
   ],
+  exports: [SharedConfigModule, CoreLoggerModule],
 })
 export class CoreModule {}
