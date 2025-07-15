@@ -8,14 +8,12 @@ describe('SharedConfigModule Integration Test', () => {
   let configService: ConfigService;
 
   beforeAll(async () => {
-    const nodeEnv = process.env.NODE_ENV;
-
     const module = await Test.createTestingModule({
       imports: [
-        SharedConfigModule.register({
+        SharedConfigModule.forRoot({
           load: [configuration],
           validate: configValidateFn,
-          envFilePath: [join(process.cwd(), 'env', `.env.${nodeEnv}`)],
+          envFilePath: [join(process.cwd(), 'env', `.env.test`)],
         }),
       ],
     }).compile();
@@ -23,7 +21,7 @@ describe('SharedConfigModule Integration Test', () => {
     configService = module.get(ConfigService);
   });
 
-  it('', () => {
+  it('application env value 확인', () => {
     // when
     const [appName, port] = [
       configService.get('appName'),
@@ -31,7 +29,7 @@ describe('SharedConfigModule Integration Test', () => {
     ];
 
     // then
-    expect(appName).toEqual('test_boilerplate');
+    expect(appName).toEqual('test_app');
     expect(port).toEqual(3000);
   });
 });

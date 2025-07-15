@@ -1,6 +1,6 @@
 import { NumberValidator, StringValidator } from '@libs/common';
 
-export enum NodeEnv {
+export enum Environment {
   TEST = 'test',
   DEVELOPMENT = 'development',
   STAGING = 'staging',
@@ -8,15 +8,15 @@ export enum NodeEnv {
 }
 
 export class ConfigurationDTO {
-  @StringValidator({ enum: Object.values(NodeEnv) })
-  NODE_ENV: NodeEnv;
+  @StringValidator({ enum: Environment })
+  NODE_ENV: Environment;
 
   @StringValidator()
-  APP_NAME: string;
+  appName: string;
 
   @NumberValidator({
     integer: true,
     min: 1,
   })
-  PORT: number;
+  port: number;
 }
