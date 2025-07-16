@@ -6,15 +6,6 @@ import {
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { Expose } from 'class-transformer';
 
-class TestDTO {
-  @StringValidator()
-  @Expose()
-  name!: string;
-
-  @NumberValidator({ positive: true })
-  age!: number;
-}
-
 describe('ValidationPipe Unit Test', () => {
   const validationPipe: ValidationPipe = new ValidationPipe(
     getValidationPipeOptions(),

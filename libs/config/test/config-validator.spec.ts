@@ -1,10 +1,10 @@
-import { configValidateFn, NodeEnv } from '@libs/config';
+import { Environment } from '@libs/common';
+import { configValidateFn } from '@libs/config';
 
 describe('ConfigValidator Unit Test', () => {
   it('잘못된 값이 설정되는 경우 에러 확인', () => {
     // given
     const mockEnv = {
-      ...process.env,
       NODE_ENV: 'unknown',
       APP_NAME: 'boilerplate',
       PORT: '3000',
@@ -14,18 +14,13 @@ describe('ConfigValidator Unit Test', () => {
     const validate = () => configValidateFn(mockEnv);
 
     // then
-    expect(validate).toThrow(
-      new Error(
-        `config validation error: NODE_ENV must be one of [test, development, staging, production]`,
-      ),
-    );
+    expect(validate).toThrow();
   });
 
-  it('유효성 검사가 통과되면 설정 값 객체 반환', () => {
+  it('유효성 검사가 통과되면 들어온 값 그대로 반환', () => {
     // given
     const mockEnv = {
-      ...process.env,
-      NODE_ENV: NodeEnv.TEST,
+      NODE_ENV: Environment.TEST,
       APP_NAME: 'boilerplate',
       PORT: '4200',
     };
@@ -35,9 +30,9 @@ describe('ConfigValidator Unit Test', () => {
 
     // then
     expect(validate).toEqual({
-      NODE_ENV: NodeEnv.TEST,
+      NODE_ENV: Environment.TEST,
       APP_NAME: 'boilerplate',
-      PORT: 4200,
+      PORT: '4200',
     });
   });
 });

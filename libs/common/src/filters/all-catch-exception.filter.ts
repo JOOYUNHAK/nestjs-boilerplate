@@ -1,3 +1,4 @@
+import { CoreLoggerService } from '@libs/core/logging/core-logger.service';
 import {
   ArgumentsHost,
   Catch,
@@ -9,6 +10,8 @@ import { Response } from 'express';
 
 @Catch()
 export class AllCatchExceptionFilter implements ExceptionFilter {
+  constructor(private readonly logger: CoreLoggerService) {}
+
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -21,6 +24,12 @@ export class AllCatchExceptionFilter implements ExceptionFilter {
     } else {
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
       message = exception.message ?? 'Internal server error';
+    }
+
+    if (statusCode < 500) {
+      this.logger.warn(exception, { message });
+    } else {
+      this.logger.error(exception, { message });
     }
 
     response.status(statusCode).json({

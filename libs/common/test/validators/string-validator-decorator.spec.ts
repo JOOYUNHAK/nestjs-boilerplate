@@ -2,6 +2,11 @@ import { StringValidator } from '@libs/common';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
+enum TestEnum {
+  AUTH = 'AUTH',
+  USER = 'USER',
+}
+
 class TestDTO {
   @StringValidator({
     trim: true,
@@ -14,17 +19,17 @@ class TestDTO {
 
   @StringValidator({
     optional: false,
-    enum: ['AUTH', 'USER'],
+    enum: TestEnum,
     message: '"AUTH"와 "USER"만이 값으로 올 수 있습니다',
   })
-  role!: 'AUTH' | 'USER';
+  role!: TestEnum;
 }
 
 describe('StringValidator Unit Test', () => {
   it('앞 뒤 공백이 사라져야 한다.', () => {
     // given
     const dto: TestDTO = plainToInstance(TestDTO, {
-      prop: '      fooo',
+      prop: ' fooo',
       role: 'AUTH',
     });
 
@@ -103,6 +108,7 @@ describe('StringValidator Unit Test', () => {
       @StringValidator({ each: true })
       strs!: string[];
     }
+
     const dto = Object.assign(new TestArrayDTO(), {
       strs: ['str1', 1, 'str2'],
     });

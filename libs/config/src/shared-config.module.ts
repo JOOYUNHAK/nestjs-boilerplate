@@ -1,10 +1,9 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 
-@Global()
 @Module({})
 export class SharedConfigModule {
-  static register(opts: ConfigModuleOptions): DynamicModule {
+  static forRoot(opts: ConfigModuleOptions): DynamicModule {
     return {
       module: SharedConfigModule,
       imports: [
@@ -13,7 +12,6 @@ export class SharedConfigModule {
           isGlobal: true,
         }),
       ],
-      exports: [ConfigModule],
     };
   }
 }
