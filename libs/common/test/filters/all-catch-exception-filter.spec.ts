@@ -1,4 +1,5 @@
 import { AllCatchExceptionFilter } from '@libs/common';
+import { CoreLoggerService } from '@libs/core/logging/core-logger.service';
 import { ArgumentsHost, BadRequestException, HttpStatus } from '@nestjs/common';
 
 describe('AllCatchExceptionFilter Unit Test', () => {
@@ -10,8 +11,13 @@ describe('AllCatchExceptionFilter Unit Test', () => {
     json: jest.fn().mockReturnThis(),
   } as any;
 
+  const mockLogger = {
+    warn: jest.fn(),
+    error: jest.fn(),
+  } as unknown as CoreLoggerService;
+
   beforeEach(() => {
-    filter = new AllCatchExceptionFilter();
+    filter = new AllCatchExceptionFilter(mockLogger);
 
     mockHost = {
       switchToHttp: () => ({
@@ -33,6 +39,9 @@ describe('AllCatchExceptionFilter Unit Test', () => {
       statusCode: HttpStatus.BAD_REQUEST,
       message: 'bad request exception',
     });
+    expect(mockLogger.warn).toHaveBeenCalledWith(error, {
+      message: 'bad request exception',
+    });
   });
 
   it('HttpException 기반 에러가 아닌 경우 반환 데이터 확인', () => {
@@ -48,6 +57,9 @@ describe('AllCatchExceptionFilter Unit Test', () => {
     );
     expect(mockResponse.json).toHaveBeenCalledWith({
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      message: 'unknown error',
+    });
+    expect(mockLogger.error).toHaveBeenCalledWith(error, {
       message: 'unknown error',
     });
   });
