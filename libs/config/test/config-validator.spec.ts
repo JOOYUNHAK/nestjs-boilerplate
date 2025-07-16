@@ -1,4 +1,5 @@
-import { configValidateFn, Environment } from '@libs/config';
+import { Environment } from '@libs/common';
+import { configValidateFn } from '@libs/config';
 
 describe('ConfigValidator Unit Test', () => {
   it('잘못된 값이 설정되는 경우 에러 확인', () => {

@@ -1,11 +1,4 @@
-import { NumberValidator, StringValidator } from '@libs/common';
-
-export enum Environment {
-  TEST = 'test',
-  DEVELOPMENT = 'development',
-  STAGING = 'staging',
-  PRODUCTION = 'production',
-}
+import { Environment, NumberValidator, StringValidator } from '@libs/common';
 
 export class ConfigurationDTO {
   @StringValidator({ enum: Environment })
