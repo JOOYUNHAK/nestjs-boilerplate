@@ -1,10 +1,10 @@
 import { AllCatchExceptionFilter, ResponseInterceptor } from '@libs/common';
-import { configValidateFn, SharedConfigModule } from '@libs/config';
-import configuration from '@libs/config/configuration';
+import { configuration, configValidateFn } from '@libs/config';
 import { ClassSerializerInterceptor, Global, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { join } from 'path';
-import { CoreLoggerModule } from './logging';
+import { SharedConfigModule } from '@libs/config/shared-config.module';
+import { CoreLoggerModule } from './logging/core-logger.module';
 
 @Global()
 @Module({

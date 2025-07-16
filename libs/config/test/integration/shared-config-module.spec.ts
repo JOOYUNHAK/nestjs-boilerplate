@@ -1,5 +1,5 @@
-import { configValidateFn, SharedConfigModule } from '@libs/config';
-import configuration from '@libs/config/configuration';
+import { configuration, configValidateFn } from '@libs/config';
+import { SharedConfigModule } from '@libs/config/shared-config.module';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { join } from 'path';

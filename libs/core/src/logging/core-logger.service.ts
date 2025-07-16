@@ -1,11 +1,10 @@
 import {
   Injectable,
   LoggerService as NestLoggerService,
-  Scope,
 } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 
-@Injectable({ scope: Scope.TRANSIENT })
+@Injectable()
 export class CoreLoggerService implements NestLoggerService {
   constructor(private readonly logger: PinoLogger) {}
 
