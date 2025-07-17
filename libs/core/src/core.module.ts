@@ -5,6 +5,7 @@ import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { join } from 'path';
 import { SharedConfigModule } from '@libs/config/shared-config.module';
 import { CoreLoggerModule } from './logging/core-logger.module';
+import { OrmModule } from './orm/orm.module';
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { CoreLoggerModule } from './logging/core-logger.module';
       envFilePath: [join(process.cwd(), 'env', `.env.${process.env.NODE_ENV}`)],
     }),
     CoreLoggerModule,
+    OrmModule,
   ],
   providers: [
     {
