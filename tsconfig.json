@@ -18,6 +18,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@api": [
+        "apps/api/src"
+      ],
+      "@api/*": [
+        "apps/api/src/*"
+      ],
       "@libs/common": [
         "libs/common/src"
       ],
