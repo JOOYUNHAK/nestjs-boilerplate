@@ -4,11 +4,14 @@ import { ValidationPipe } from '@nestjs/common';
 import { getValidationPipeOptions } from '@libs/common';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiModule, { bufferLogs: true });
 
   app.setGlobalPrefix('api');
+
+  app.use(helmet());
 
   app.useGlobalPipes(new ValidationPipe(getValidationPipeOptions()));
   app.useLogger(app.get(Logger));
