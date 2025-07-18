@@ -1,4 +1,5 @@
 import {
+  ArrayValidator,
   Environment,
   NestedValidator,
   NumberValidator,
@@ -18,6 +19,12 @@ export class ConfigurationDTO {
     min: 1,
   })
   port: number;
+
+  @ArrayValidator(
+    { minItems: 1 },
+    { decorator: StringValidator, options: { trim: true } },
+  )
+  origin: string[];
 
   @NestedValidator(() => OrmOptions)
   db: OrmOptions;

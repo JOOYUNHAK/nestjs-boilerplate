@@ -14,6 +14,7 @@ describe('mapEnvToConfig Unit Test', () => {
       NODE_ENV: env.NODE_ENV,
       appName: env.APP_NAME,
       port: +env.PORT,
+      origin: env.CORS_ORIGIN.split(','),
       db: {
         dbName: env.DB_NAME,
         host: env.DB_HOST,

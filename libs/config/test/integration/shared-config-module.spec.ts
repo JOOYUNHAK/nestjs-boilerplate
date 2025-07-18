@@ -23,14 +23,16 @@ describe('SharedConfigModule Integration Test', () => {
 
   it('application env value 확인', () => {
     // when
-    const [appName, port] = [
+    const [appName, port, origin] = [
       configService.get('appName'),
       configService.get('port'),
+      configService.get('origin'),
     ];
-
+    console.debug(origin);
     // then
     expect(appName).toEqual('test_app');
     expect(port).toEqual(3000);
+    expect(origin).toEqual(['localhost:3000']);
   });
 
   it('db env value 확인', () => {

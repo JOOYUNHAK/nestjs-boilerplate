@@ -4,6 +4,7 @@ const MOCK_ENV = {
   NODE_ENV: process.env.NODE_ENV ?? Environment.TEST,
   APP_NAME: 'test_app',
   PORT: '3000',
+  CORS_ORIGIN: 'localhost:3000',
   DB_NAME: 'test_db',
   DB_HOST: 'localhost',
   DB_PORT: '5432',

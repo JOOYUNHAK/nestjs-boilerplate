@@ -1,8 +1,7 @@
-import { Environment } from '@libs/common';
-
 export const configuration = () => ({
   appName: process.env.APP_NAME,
   port: +(process.env.PORT as string),
+  origin: process.env.CORS_ORIGIN?.split(','),
   db: {
     dbName: process.env.DB_NAME,
     host: process.env.DB_HOST,
