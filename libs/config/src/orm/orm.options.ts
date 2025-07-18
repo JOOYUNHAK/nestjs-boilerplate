@@ -1,5 +1,4 @@
 import {
-  BooleanValidator,
   NestedValidator,
   NumberValidator,
   StringValidator,
@@ -22,9 +21,6 @@ export class OrmOptions {
 
   @StringValidator()
   password: string;
-
-  @BooleanValidator()
-  debug: boolean;
 
   @NestedValidator(() => OrmDriverOptions)
   driverOptions: OrmDriverOptions;
