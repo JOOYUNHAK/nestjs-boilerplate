@@ -4,9 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import * as CoreEntities from '@libs/core/entity';
 import { OrmOptions } from '@libs/config';
+import { Environment } from '@libs/common';
 
 export const getAppOrmConfig = (config: ConfigService) => {
-  const { dbName, host, port, user, password, driverOptions, pool, debug } =
+  const { dbName, host, port, user, password, driverOptions, pool } =
     config.getOrThrow<OrmOptions>('db');
 
   return defineConfig({
@@ -25,7 +26,7 @@ export const getAppOrmConfig = (config: ConfigService) => {
     port,
     user,
     password,
-    debug,
+    debug: process.env.NODE_ENV === Environment.PRODUCTION ? false : true,
     driverOptions: {
       connection: {
         statement_timeout: driverOptions.connection.statementTimeout,
