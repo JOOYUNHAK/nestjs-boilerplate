@@ -35,6 +35,12 @@
       ],
       "@libs/core/*": [
         "libs/core/src/*"
+      ],
+      "@libs/testing": [
+        "libs/testing/src"
+      ],
+      "@libs/testing/*": [
+        "libs/testing/src/*"
       ]
     }
   }
