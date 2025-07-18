@@ -1,5 +1,5 @@
 {
-  "name": "bo",
+  "name": "api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -8,25 +8,30 @@
   "scripts": {
     "prepare": "husky",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
+    "mikro-orm:schema:create": "mikro-orm  schema:create",
+    "start": "nest api start",
+    "start:api:dev": "nest start api --watch",
+    "start:api:debug": "nest start api --debug --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/api/test/jest-e2e.json"
   },
   "dependencies": {
+    "@mikro-orm/core": "^6.4.16",
+    "@mikro-orm/migrations": "^6.4.16",
+    "@mikro-orm/nestjs": "^6.1.1",
+    "@mikro-orm/postgresql": "^6.4.16",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "dotenv": "^17.2.0",
     "nestjs-pino": "^4.4.0",
     "pino-http": "^10.5.0",
     "reflect-metadata": "^0.2.2",
@@ -37,6 +42,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
+    "@mikro-orm/cli": "^6.4.16",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
@@ -81,13 +87,14 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/src/",
-      "<rootDir>/libs/"
+      "<rootDir>/libs/",
+      "<rootDir>/apps/"
     ],
     "moduleNameMapper": {
       "^@libs/common(|/.*)$": "<rootDir>/libs/common/src/$1",
       "^@libs/config(|/.*)$": "<rootDir>/libs/config/src/$1",
-      "^@libs/core(|/.*)$": "<rootDir>/libs/core/src/$1"
+      "^@libs/core(|/.*)$": "<rootDir>/libs/core/src/$1",
+      "^@libs/testing(|/.*)$": "<rootDir>/libs/testing/src/$1"
     }
   },
   "lint-staged": {

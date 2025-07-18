@@ -1,4 +1,10 @@
-import { Environment, NumberValidator, StringValidator } from '@libs/common';
+import {
+  Environment,
+  NestedValidator,
+  NumberValidator,
+  StringValidator,
+} from '@libs/common';
+import { OrmOptions } from './orm';
 
 export class ConfigurationDTO {
   @StringValidator({ enum: Environment })
@@ -12,4 +18,7 @@ export class ConfigurationDTO {
     min: 1,
   })
   port: number;
+
+  @NestedValidator(() => OrmOptions)
+  db: OrmOptions;
 }
