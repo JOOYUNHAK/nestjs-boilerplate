@@ -1,4 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
+import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsOptional } from 'class-validator';
 
 export interface BooleanValidatorOptions {
@@ -15,6 +16,14 @@ export function BooleanValidator(
   if (options.optional) {
     decorators.push(IsOptional());
   }
+
+  decorators.push(
+    Transform(({ value }) => {
+      if (value === 'true') return true;
+      if (value === 'false') return false;
+      return value;
+    }),
+  );
 
   const eachOption = options.each ? true : false;
   const message =

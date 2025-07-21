@@ -29,6 +29,7 @@ import { OrmModule } from './orm/orm.module';
         new ClassSerializerInterceptor(reflector, {
           enableImplicitConversion: true,
           excludeExtraneousValues: true,
+          exposeUnsetFields: false, // undefined 제거
         }),
       inject: [Reflector],
     },
