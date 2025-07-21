@@ -7,6 +7,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { UiMessages } from '../constants/ui-messages';
 
 @Catch()
 export class AllCatchExceptionFilter implements ExceptionFilter {
@@ -16,25 +17,32 @@ export class AllCatchExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    let statusCode: number, message: string;
+    let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+    let uiMessage: UiMessages;
+    let systemMessage = 'Unknown Error';
 
     if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
-      message = exception.message;
+      const payload = exception.getResponse() as {
+        uiMessage: UiMessages;
+        systemMessage: string;
+      };
+      uiMessage = payload.uiMessage ?? (exception.message as UiMessages);
+      systemMessage = payload.systemMessage ?? payload.uiMessage;
     } else {
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = exception.message ?? 'Internal server error';
+      uiMessage = UiMessages.INTERNAL_SERVER_ERROR;
     }
 
-    if (statusCode < 500) {
-      this.logger.warn(exception, { message });
+    if (statusCode < HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.warn(exception);
     } else {
-      this.logger.error(exception, { message });
+      this.logger.error(exception);
     }
 
     response.status(statusCode).json({
       statusCode,
-      message,
+      message: uiMessage,
     });
   }
 }
