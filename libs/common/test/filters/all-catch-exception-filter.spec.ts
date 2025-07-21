@@ -1,6 +1,10 @@
-import { AllCatchExceptionFilter } from '@libs/common';
+import {
+  AllCatchExceptionFilter,
+  AppException,
+  UiMessages,
+} from '@libs/common';
 import { CoreLoggerService } from '@libs/core/logging/core-logger.service';
-import { ArgumentsHost, BadRequestException, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, HttpStatus } from '@nestjs/common';
 
 describe('AllCatchExceptionFilter Unit Test', () => {
   let filter: AllCatchExceptionFilter;
@@ -28,7 +32,11 @@ describe('AllCatchExceptionFilter Unit Test', () => {
 
   it('HttpException 기반 에러인 경우 반환 데이터 확인', () => {
     // given
-    const error = new BadRequestException('bad request exception');
+    const error = new AppException(
+      UiMessages.BAD_REQUEST,
+      'bad request',
+      HttpStatus.BAD_REQUEST,
+    );
 
     // when
     filter.catch(error, mockHost);
@@ -37,11 +45,9 @@ describe('AllCatchExceptionFilter Unit Test', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
     expect(mockResponse.json).toHaveBeenCalledWith({
       statusCode: HttpStatus.BAD_REQUEST,
-      message: 'bad request exception',
+      message: UiMessages.BAD_REQUEST,
     });
-    expect(mockLogger.warn).toHaveBeenCalledWith(error, {
-      message: 'bad request exception',
-    });
+    expect(mockLogger.warn).toHaveBeenCalledWith(error);
   });
 
   it('HttpException 기반 에러가 아닌 경우 반환 데이터 확인', () => {
@@ -57,10 +63,8 @@ describe('AllCatchExceptionFilter Unit Test', () => {
     );
     expect(mockResponse.json).toHaveBeenCalledWith({
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      message: 'unknown error',
+      message: UiMessages.INTERNAL_SERVER_ERROR,
     });
-    expect(mockLogger.error).toHaveBeenCalledWith(error, {
-      message: 'unknown error',
-    });
+    expect(mockLogger.error).toHaveBeenCalledWith(error);
   });
 });

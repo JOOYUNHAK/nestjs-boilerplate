@@ -6,6 +6,7 @@ import { join } from 'path';
 import { SharedConfigModule } from '@libs/config/shared-config.module';
 import { CoreLoggerModule } from './logging/core-logger.module';
 import { OrmModule } from './orm/orm.module';
+import { SecurityModule } from '@libs/security/security.module';
 
 @Global()
 @Module({
@@ -17,6 +18,7 @@ import { OrmModule } from './orm/orm.module';
     }),
     CoreLoggerModule,
     OrmModule,
+    SecurityModule,
   ],
   providers: [
     {
@@ -29,6 +31,7 @@ import { OrmModule } from './orm/orm.module';
         new ClassSerializerInterceptor(reflector, {
           enableImplicitConversion: true,
           excludeExtraneousValues: true,
+          exposeUnsetFields: false, // undefined 제거
         }),
       inject: [Reflector],
     },
@@ -37,6 +40,6 @@ import { OrmModule } from './orm/orm.module';
       useClass: ResponseInterceptor,
     },
   ],
-  exports: [SharedConfigModule, CoreLoggerModule],
+  exports: [SharedConfigModule, CoreLoggerModule, SecurityModule],
 })
 export class CoreModule {}

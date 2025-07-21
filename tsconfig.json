@@ -42,6 +42,12 @@
       "@libs/core/*": [
         "libs/core/src/*"
       ],
+      "@libs/security": [
+        "libs/security/src"
+      ],
+      "@libs/security/*": [
+        "libs/security/src/*"
+      ],
       "@libs/testing": [
         "libs/testing/src"
       ],

@@ -1,4 +1,6 @@
 import {
+  BooleanValidator,
+  DateValidator,
   getValidationPipeOptions,
   NumberValidator,
   StringValidator,
@@ -80,5 +82,41 @@ describe('ValidationPipe Unit Test', () => {
 
     // then
     await expect(result).rejects.toThrow(BadRequestException);
+  });
+
+  it('property type에 따라 명시적 변환이 이루어지는지 확인', async () => {
+    // given
+    class TestDTO {
+      @NumberValidator()
+      @Expose()
+      id!: number;
+
+      @BooleanValidator()
+      @Expose()
+      bool!: boolean;
+
+      @DateValidator()
+      @Expose()
+      date!: Date;
+    }
+
+    const dto = {
+      id: '1',
+      bool: 'given',
+      date: new Date().toISOString(),
+    };
+
+    // when
+    const result = await validationPipe.transform(dto, {
+      metatype: TestDTO,
+      type: 'body',
+      data: '',
+    });
+
+    // then
+    expect(result.id).toBe(1);
+    expect(result.bool).toBe(true);
+    expect(result.date).toBeInstanceOf(Date);
+    expect(result.date).toEqual(new Date(dto.date));
   });
 });

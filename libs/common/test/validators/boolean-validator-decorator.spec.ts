@@ -1,39 +1,14 @@
-import { BooleanValidator } from '@libs/common';
+import { DateValidator } from '@libs/common';
 import { validateSync } from 'class-validator';
 
-describe('BooleanValidator Unit Test', () => {
-  it('boolean 형식이 아닐 때 에러 확인', () => {
-    // given
+describe('DateValidatorDecorator Unit Test', () => {
+  it('날짜 에러 확인', () => {
     class TestDTO {
-      @BooleanValidator()
-      bool!: boolean;
+      @DateValidator()
+      date!: Date;
     }
-
-    const dto = Object.assign(new TestDTO(), { bool: 'true ' });
-
-    // when
-    const errors = validateSync(dto);
-
-    // then
-    expect(errors).toHaveLength(1);
-    expect(errors.at(0)).toMatchObject({
-      property: 'bool',
-      constraints: {
-        isBoolean: 'bool must be a boolean',
-      },
-    });
-  });
-
-  it('배열일 경우 내부 요소 확인', () => {
     // given
-    class TestArrayDTO {
-      @BooleanValidator({ each: true })
-      bools!: boolean[];
-    }
-
-    const dto = Object.assign(new TestArrayDTO(), {
-      bools: [true, false, 'true'],
-    });
+    const dto = Object.assign(new TestDTO(), { date: 'date' });
 
     // when
     const errors = validateSync(dto);
@@ -41,9 +16,9 @@ describe('BooleanValidator Unit Test', () => {
     // then
     expect(errors).toHaveLength(1);
     expect(errors.at(0)).toMatchObject({
-      property: 'bools',
+      property: 'date',
       constraints: {
-        isBoolean: 'bools each elements must be a boolean',
+        isDate: `date must be a Date`,
       },
     });
   });

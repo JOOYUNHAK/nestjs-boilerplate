@@ -1,4 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
+import { Type } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
 
 export interface DateValidatorOptions {
@@ -16,6 +17,8 @@ export function DateValidator(
   if (options.optional) {
     decorators.push(IsOptional());
   }
+
+  decorators.push(Type(() => Date));
 
   const eachOption = options.each ? true : false;
 

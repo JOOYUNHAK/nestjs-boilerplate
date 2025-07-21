@@ -28,7 +28,6 @@ describe('SharedConfigModule Integration Test', () => {
       configService.get('port'),
       configService.get('origin'),
     ];
-    console.debug(origin);
     // then
     expect(appName).toEqual('test_app');
     expect(port).toEqual(3000);

@@ -10,6 +10,10 @@ export function mapEnvToConfig(env: Record<string, any>): ConfigurationDTO {
     appName: env.APP_NAME,
     port: +env.PORT,
     origin: env.CORS_ORIGIN?.split(','),
+    jwt: {
+      secret: env.JWT_SECRET,
+      expiresIn: env.JWT_EXPIRES_IN,
+    },
     db: {
       dbName: env.DB_NAME,
       host: env.DB_HOST,

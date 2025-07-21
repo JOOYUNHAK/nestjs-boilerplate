@@ -6,6 +6,7 @@ import {
   StringValidator,
 } from '@libs/common';
 import { OrmOptions } from './orm';
+import { JwtOptions } from './jwt/jwt-options';
 
 export class ConfigurationDTO {
   @StringValidator({ enum: Environment })
@@ -25,6 +26,9 @@ export class ConfigurationDTO {
     { decorator: StringValidator, options: { trim: true } },
   )
   origin: string[];
+
+  @NestedValidator(() => JwtOptions)
+  jwt: JwtOptions;
 
   @NestedValidator(() => OrmOptions)
   db: OrmOptions;

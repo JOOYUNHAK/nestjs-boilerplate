@@ -17,9 +17,9 @@ import { Environment } from '@libs/common';
             level: isProduction ? 'info' : 'debug',
             // level 30 -> INFO 형식
             formatters: {
-              level: (label) => {
-                return { level: label.toUpperCase() }
-              }
+              level: label => {
+                return { level: label.toUpperCase() };
+              },
             },
             genReqId: req => req.headers['x-request-id'] || randomUUID(),
             // 민감 정보 필터링
@@ -46,7 +46,7 @@ import { Environment } from '@libs/common';
               }),
             },
             customProps: (_req, _res) => ({
-              env: process.env.NODE_ENV
+              env: process.env.NODE_ENV,
             }),
             timestamp: () => `, "time":"${new Date().toISOString()}"`,
           },
@@ -55,6 +55,6 @@ import { Environment } from '@libs/common';
     }),
   ],
   providers: [CoreLoggerService],
-  exports: [CoreLoggerService, PinoLoggerModule],
+  exports: [CoreLoggerService],
 })
 export class CoreLoggerModule {}

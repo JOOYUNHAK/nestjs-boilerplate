@@ -5,6 +5,8 @@ const MOCK_ENV = {
   APP_NAME: 'test_app',
   PORT: '3000',
   CORS_ORIGIN: 'localhost:3000',
+  JWT_SECRET: 'test_jwt_secret',
+  JWT_EXPIRES_IN: '1d',
   DB_NAME: 'test_db',
   DB_HOST: 'localhost',
   DB_PORT: '5432',
