@@ -2,6 +2,10 @@ export const configuration = () => ({
   appName: process.env.APP_NAME,
   port: +(process.env.PORT as string),
   origin: process.env.CORS_ORIGIN?.split(','),
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  },
   db: {
     dbName: process.env.DB_NAME,
     host: process.env.DB_HOST,

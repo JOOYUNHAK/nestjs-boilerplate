@@ -1,1 +1,1 @@
-export * from './security.module';
+export * from './public-api.decorator';
