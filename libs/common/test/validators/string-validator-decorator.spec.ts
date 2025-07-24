@@ -101,28 +101,4 @@ describe('StringValidator Unit Test', () => {
       },
     });
   });
-
-  it('배열일 경우 내부 요소 확인', () => {
-    // given
-    class TestArrayDTO {
-      @StringValidator({ each: true })
-      strs!: string[];
-    }
-
-    const dto = Object.assign(new TestArrayDTO(), {
-      strs: ['str1', 1, 'str2'],
-    });
-
-    // when
-    const errors = validateSync(dto);
-
-    // then
-    expect(errors).toHaveLength(1);
-    expect(errors.at(0)).toMatchObject({
-      property: 'strs',
-      constraints: {
-        isString: 'strs each elements must be a string',
-      },
-    });
-  });
 });

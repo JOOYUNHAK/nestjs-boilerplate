@@ -7,6 +7,6 @@ export class OrmDriverConnectionOptions {
 }
 
 export class OrmDriverOptions {
-  @NestedValidator(() => OrmDriverConnectionOptions)
+  @NestedValidator({ type: () => OrmDriverConnectionOptions })
   connection: OrmDriverConnectionOptions;
 }

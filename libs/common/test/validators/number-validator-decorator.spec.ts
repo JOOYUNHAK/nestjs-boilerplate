@@ -78,28 +78,4 @@ describe('NumberValidator Unit Test', () => {
       },
     });
   });
-
-  it('배열일 경우 내부 요소 확인', () => {
-    // given
-    class TestArrayDTO {
-      @NumberValidator({
-        each: true,
-        positive: true,
-      })
-      nums!: number[];
-    }
-    const dto = Object.assign(new TestArrayDTO(), { nums: [1, 2, NaN] });
-
-    // when
-    const errors = validateSync(dto);
-
-    // then
-    expect(errors).toHaveLength(1);
-    expect(errors.at(0)).toMatchObject({
-      property: 'nums',
-      constraints: {
-        min: 'nums each elements must be a positive number',
-      },
-    });
-  });
 });

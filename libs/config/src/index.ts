@@ -4,3 +4,4 @@ export * from './map-env-to-config';
 export * from './configuration';
 export * from './orm';
 export * from './jwt/jwt-options';
+export * from './sentry/sentry.options';

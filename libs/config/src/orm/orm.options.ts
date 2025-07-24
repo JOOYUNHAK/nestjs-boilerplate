@@ -22,9 +22,9 @@ export class OrmOptions {
   @StringValidator()
   password: string;
 
-  @NestedValidator(() => OrmDriverOptions)
+  @NestedValidator({ type: () => OrmDriverOptions })
   driverOptions: OrmDriverOptions;
 
-  @NestedValidator(() => OrmPoolOptions)
+  @NestedValidator({ type: () => OrmPoolOptions })
   pool: OrmPoolOptions;
 }

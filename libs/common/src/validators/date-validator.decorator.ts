@@ -1,12 +1,16 @@
 import { applyDecorators } from '@nestjs/common';
 import { Type } from 'class-transformer';
-import { IsDate, IsOptional } from 'class-validator';
+import { IsDate, IsNotEmpty, IsOptional } from 'class-validator';
 
 export interface DateValidatorOptions {
   optional?: boolean;
   message?: string;
   each?: boolean;
 }
+
+export type DateValidatorType = (
+  opts?: DateValidatorOptions,
+) => PropertyDecorator;
 
 export function DateValidator(
   options: DateValidatorOptions = {},
@@ -16,6 +20,8 @@ export function DateValidator(
   // 1) optional 처리
   if (options.optional) {
     decorators.push(IsOptional());
+  } else {
+    decorators.push(IsNotEmpty());
   }
 
   decorators.push(Type(() => Date));
@@ -36,5 +42,3 @@ export function DateValidator(
 
   return applyDecorators(...decorators);
 }
-
-DateValidator.__isPrimitiveValidator = true as const;

@@ -1,13 +1,33 @@
-// src/common/validators/array-validator.decorator.ts
-
 import { applyDecorators } from '@nestjs/common';
 import {
   IsArray,
   ArrayMinSize,
   ArrayMaxSize,
   IsOptional,
+  IsNotEmpty,
 } from 'class-validator';
-import { PrimitiveValidatorFunction } from './primitive-validator.interface';
+import { BooleanValidatorType } from './boolean-validator.decorator';
+import { DateValidatorType } from './date-validator.decorator';
+import {
+  NestedValidator,
+  NestedValidatorOptions,
+  NestedValidatorType,
+} from './nested-validator.decorator';
+import { NumberValidatorType } from './number-validator.decorator';
+import { StringValidatorType } from './string-validator.decorator';
+
+export type ValidatorType =
+  | StringValidatorType
+  | NumberValidatorType
+  | DateValidatorType
+  | BooleanValidatorType
+  | NestedValidatorType;
+
+function isNestedValidator(
+  decorator: ValidatorType,
+): decorator is NestedValidatorType {
+  return decorator === NestedValidator;
+}
 
 export interface ArrayValidatorOptions {
   optional?: boolean;
@@ -16,9 +36,7 @@ export interface ArrayValidatorOptions {
   message?: string;
 }
 
-export interface ElementValidatorConfig<
-  D extends PrimitiveValidatorFunction<any>,
-> {
+export interface ElementValidatorConfig<D extends ValidatorType> {
   /**
    *
    * StringValidator, NumberValidator ...
@@ -31,7 +49,7 @@ export interface ElementValidatorConfig<
   options: Omit<NonNullable<Parameters<D>[0]>, 'each'>;
 }
 
-export function ArrayValidator<D extends PrimitiveValidatorFunction<any>>(
+export function ArrayValidator<D extends ValidatorType>(
   options: ArrayValidatorOptions = {},
   elementValidator?: ElementValidatorConfig<D>,
 ) {
@@ -39,6 +57,8 @@ export function ArrayValidator<D extends PrimitiveValidatorFunction<any>>(
 
   if (options.optional) {
     decorators.push(IsOptional());
+  } else {
+    decorators.push(IsNotEmpty());
   }
 
   decorators.push(
@@ -67,12 +87,22 @@ export function ArrayValidator<D extends PrimitiveValidatorFunction<any>>(
 
   if (elementValidator) {
     const { decorator, options: elementOpts } = elementValidator;
-    decorators.push(
-      decorator({
-        ...elementOpts,
-        each: true, // each: true 자동 적용
-      }),
-    );
+
+    if (isNestedValidator(decorator)) {
+      decorators.push(
+        NestedValidator({
+          ...(elementOpts as NestedValidatorOptions),
+          each: true, // each: true 자동 적용
+        }),
+      );
+    } else {
+      decorators.push(
+        decorator({
+          ...elementOpts,
+          each: true, // each: true 자동 적용
+        }),
+      );
+    }
   }
 
   return applyDecorators(...decorators);

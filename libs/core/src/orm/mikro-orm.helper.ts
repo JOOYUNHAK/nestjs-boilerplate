@@ -1,12 +1,26 @@
 import { Migrator, TSMigrationGenerator } from '@mikro-orm/migrations';
-import { defineConfig, UnderscoreNamingStrategy } from '@mikro-orm/postgresql';
+import {
+  defineConfig,
+  PostgreSqlDriver,
+  UnderscoreNamingStrategy,
+} from '@mikro-orm/postgresql';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import * as CoreEntities from '@libs/core/entity';
 import { OrmOptions } from '@libs/config';
 import { Environment } from '@libs/common';
+import { MikroOrmModuleAsyncOptions } from '@mikro-orm/nestjs';
 
-export const getAppOrmConfig = (config: ConfigService) => {
+export const getRootAsyncOptions = (): MikroOrmModuleAsyncOptions => ({
+  inject: [ConfigService],
+  useFactory: (configService: ConfigService) => {
+    const configs = getAppOrmConfig(configService);
+    return { ...configs, autoLoadEntities: true };
+  },
+  driver: PostgreSqlDriver,
+});
+
+const getAppOrmConfig = (config: ConfigService) => {
   const { dbName, host, port, user, password, driverOptions, pool } =
     config.getOrThrow<OrmOptions>('db');
 

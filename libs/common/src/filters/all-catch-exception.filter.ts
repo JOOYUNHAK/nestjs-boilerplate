@@ -8,27 +8,24 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UiMessages } from '../constants/ui-messages';
+import { SentryExceptionCaptured } from '@sentry/nestjs';
 
 @Catch()
 export class AllCatchExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: CoreLoggerService) {}
 
+  @SentryExceptionCaptured()
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     let uiMessage: UiMessages;
-    let systemMessage = 'Unknown Error';
 
     if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
-      const payload = exception.getResponse() as {
-        uiMessage: UiMessages;
-        systemMessage: string;
-      };
+      const payload = exception.getResponse() as { uiMessage: UiMessages };
       uiMessage = payload.uiMessage ?? (exception.message as UiMessages);
-      systemMessage = payload.systemMessage ?? payload.uiMessage;
     } else {
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
       uiMessage = UiMessages.INTERNAL_SERVER_ERROR;

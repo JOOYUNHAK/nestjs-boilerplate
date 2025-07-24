@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
 import { CoreLoggerService } from './core-logger.service';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
 import { Environment } from '@libs/common';
 
+@Global()
 @Module({
   imports: [
     PinoLoggerModule.forRootAsync({

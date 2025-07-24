@@ -1,16 +1,15 @@
 import { configuration, configValidateFn, OrmOptions } from '@libs/config';
-import { SharedConfigModule } from '@libs/config/shared-config.module';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { join } from 'path';
 
-describe('SharedConfigModule Integration Test', () => {
+describe('ConfigModule Integration Test', () => {
   let configService: ConfigService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
-        SharedConfigModule.forRoot({
+        ConfigModule.forRoot({
           load: [configuration],
           validate: configValidateFn,
           envFilePath: [join(process.cwd(), 'env', `.env.test`)],
@@ -57,5 +56,26 @@ describe('SharedConfigModule Integration Test', () => {
         acquireTimeoutMillis: 10000,
       },
     });
+  });
+
+  it('jwt env value 확인', () => {
+    // when
+    const jwt = configService.get('jwt');
+
+    // then
+    expect(jwt).toStrictEqual({
+      secret: 'test_jwt_secret',
+      expiresIn: '1d',
+    });
+  });
+
+  it('sentry env value 확인', () => {
+    // when
+    const sentry = configService.get('sentry');
+
+    // then
+    // sentry는 main.ts에서 configModule이 로드되기 전 구성되므로
+    // key값들을 등록하지 않고 validation을 통과하는지만 확인됩니다.
+    expect(sentry).toBeUndefined();
   });
 });
