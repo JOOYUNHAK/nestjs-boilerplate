@@ -17,7 +17,7 @@ export class ApiService {
     throw new Error('Unexpected error to test sentry integration');
   }
 
-  async excute(id: number): Promise<User | null> {
+  async execute(id: number): Promise<User | null> {
     return this.apiRepository.findById(id);
   }
 }
