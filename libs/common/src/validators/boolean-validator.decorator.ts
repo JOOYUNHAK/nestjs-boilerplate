@@ -1,12 +1,16 @@
 import { applyDecorators } from '@nestjs/common';
-import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsBoolean, IsNotEmpty, IsOptional } from 'class-validator';
 
 export interface BooleanValidatorOptions {
   optional?: boolean;
   message?: string;
   each?: boolean;
 }
+
+export type BooleanValidatorType = (
+  opts?: BooleanValidatorOptions,
+) => PropertyDecorator;
 
 export function BooleanValidator(
   options: BooleanValidatorOptions = {},
@@ -15,6 +19,8 @@ export function BooleanValidator(
 
   if (options.optional) {
     decorators.push(IsOptional());
+  } else {
+    decorators.push(IsNotEmpty());
   }
 
   decorators.push(
@@ -36,5 +42,3 @@ export function BooleanValidator(
 
   return applyDecorators(...decorators);
 }
-
-BooleanValidator.__isPrimitiveValidator = true as const;

@@ -1,6 +1,13 @@
 import { applyDecorators } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { IsNumber, IsInt, IsOptional, Min, Max } from 'class-validator';
+import {
+  IsNumber,
+  IsInt,
+  IsOptional,
+  Min,
+  Max,
+  IsNotEmpty,
+} from 'class-validator';
 
 export interface NumberValidatorOptions {
   optional?: boolean;
@@ -11,6 +18,10 @@ export interface NumberValidatorOptions {
   max?: number;
   message?: string;
 }
+
+export type NumberValidatorType = (
+  opts?: NumberValidatorOptions,
+) => PropertyDecorator;
 
 export function NumberValidator(
   options: NumberValidatorOptions = {},
@@ -31,6 +42,8 @@ export function NumberValidator(
   // 2) 선택 필드는 optional
   if (options.optional) {
     decorators.push(IsOptional());
+  } else {
+    decorators.push(IsNotEmpty());
   }
 
   // 배열 지원
@@ -106,5 +119,3 @@ export function NumberValidator(
 
   return applyDecorators(...decorators);
 }
-
-NumberValidator.__isPrimitiveValidator = true as const;

@@ -1,6 +1,13 @@
 import { applyDecorators } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { IsIn, IsOptional, IsString, Length, Matches } from 'class-validator';
+import {
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+} from 'class-validator';
 
 interface StringValidatorOptions {
   trim?: boolean;
@@ -12,6 +19,10 @@ interface StringValidatorOptions {
   message?: string;
   each?: boolean;
 }
+
+export type StringValidatorType = (
+  opts?: StringValidatorOptions,
+) => PropertyDecorator;
 
 export function StringValidator(options: StringValidatorOptions = {}) {
   const decorators: PropertyDecorator[] = [];
@@ -28,6 +39,8 @@ export function StringValidator(options: StringValidatorOptions = {}) {
   // 2) optional 처리
   if (options.optional) {
     decorators.push(IsOptional());
+  } else {
+    decorators.push(IsNotEmpty());
   }
 
   const eachOption = options.each ? true : false;
@@ -100,5 +113,3 @@ export function StringValidator(options: StringValidatorOptions = {}) {
 
   return applyDecorators(...decorators);
 }
-
-StringValidator.__isPrimitiveValidator = true as const;
