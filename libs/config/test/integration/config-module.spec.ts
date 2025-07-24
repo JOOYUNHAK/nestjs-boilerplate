@@ -69,7 +69,7 @@ describe('ConfigModule Integration Test', () => {
     });
   });
 
-  it('senty env value 확인', () => {
+  it('sentry env value 확인', () => {
     // when
     const sentry = configService.get('sentry');
 
