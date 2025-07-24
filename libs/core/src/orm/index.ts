@@ -1,1 +1,1 @@
-export * from './orm.helper';
+export * from './mikro-orm.helper';

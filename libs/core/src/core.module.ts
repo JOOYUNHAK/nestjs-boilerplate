@@ -1,24 +1,27 @@
 import { AllCatchExceptionFilter, ResponseInterceptor } from '@libs/common';
 import { configuration, configValidateFn } from '@libs/config';
-import { ClassSerializerInterceptor, Global, Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { join } from 'path';
-import { SharedConfigModule } from '@libs/config/shared-config.module';
 import { CoreLoggerModule } from './logging/core-logger.module';
-import { OrmModule } from './orm/orm.module';
+import { SentryModule } from '@sentry/nestjs/setup';
 import { SecurityModule } from '@libs/security/security.module';
+import { ConfigModule } from '@nestjs/config';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { getRootAsyncOptions } from './orm';
 
-@Global()
 @Module({
   imports: [
-    SharedConfigModule.forRoot({
+    ConfigModule.forRoot({
+      isGlobal: true,
       load: [configuration],
       validate: configValidateFn,
       envFilePath: [join(process.cwd(), 'env', `.env.${process.env.NODE_ENV}`)],
     }),
+    MikroOrmModule.forRootAsync(getRootAsyncOptions()),
     CoreLoggerModule,
-    OrmModule,
     SecurityModule,
+    SentryModule.forRoot(),
   ],
   providers: [
     {
@@ -40,6 +43,5 @@ import { SecurityModule } from '@libs/security/security.module';
       useClass: ResponseInterceptor,
     },
   ],
-  exports: [SharedConfigModule, CoreLoggerModule, SecurityModule],
 })
 export class CoreModule {}
