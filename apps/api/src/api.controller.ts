@@ -28,7 +28,7 @@ export class ApiController {
   }
 
   @Post(':id')
-  excute(@Param('id') id: number) {
-    return this.apiService.excute(id);
+  execute(@Param('id') id: number) {
+    return this.apiService.execute(id);
   }
 }
