@@ -53,3 +53,5 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # lint
 .eslintcache
+# Sentry Config File
+.env.sentry-build-plugin

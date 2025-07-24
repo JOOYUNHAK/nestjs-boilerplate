@@ -14,6 +14,11 @@ export function mapEnvToConfig(env: Record<string, any>): ConfigurationDTO {
       secret: env.JWT_SECRET,
       expiresIn: env.JWT_EXPIRES_IN,
     },
+    sentry: {
+      dsn: env.SENTRY_DSN,
+      profilesSampleRate: +env.SENTRY_PROFILES_SAMPLE_RATE,
+      tracesSampleRate: +env.SENTRY_TRACES_SAMPLE_RATE,
+    },
     db: {
       dbName: env.DB_NAME,
       host: env.DB_HOST,

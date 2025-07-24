@@ -1,3 +1,4 @@
+import './instrument';
 import { NestFactory } from '@nestjs/core';
 import { ApiModule } from './api.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -38,4 +39,4 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap().catch(e => console.error(e));
+void bootstrap();

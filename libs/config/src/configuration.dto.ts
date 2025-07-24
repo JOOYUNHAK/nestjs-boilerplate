@@ -7,6 +7,7 @@ import {
 } from '@libs/common';
 import { OrmOptions } from './orm';
 import { JwtOptions } from './jwt/jwt-options';
+import { SentryOptions } from './sentry/sentry.options';
 
 export class ConfigurationDTO {
   @StringValidator({ enum: Environment })
@@ -27,9 +28,12 @@ export class ConfigurationDTO {
   )
   origin: string[];
 
-  @NestedValidator(() => JwtOptions)
+  @NestedValidator({ type: () => JwtOptions })
   jwt: JwtOptions;
 
-  @NestedValidator(() => OrmOptions)
+  @NestedValidator({ type: () => SentryOptions })
+  sentry: SentryOptions;
+
+  @NestedValidator({ type: () => OrmOptions })
   db: OrmOptions;
 }
