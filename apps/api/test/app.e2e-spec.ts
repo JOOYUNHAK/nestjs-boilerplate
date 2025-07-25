@@ -25,7 +25,7 @@ describe('ApiController (e2e)', () => {
     return request(app.getHttpServer()).get('/api/test/1').expect(200);
   });
 
-  it('/api/test/debug-throttle (GET', async () => {
+  it('/api/test/debug-throttle (GET)', async () => {
     // given
     const configService = app.get(ConfigService);
     const limit = configService.getOrThrow('throttle.limit');
