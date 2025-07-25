@@ -78,4 +78,15 @@ describe('ConfigModule Integration Test', () => {
     // key값들을 등록하지 않고 validation을 통과하는지만 확인됩니다.
     expect(sentry).toBeUndefined();
   });
+
+  it('throttle env value 확인', () => {
+    // when
+    const throttle = configService.get('throttle');
+
+    // then
+    expect(throttle).toStrictEqual({
+      ttl: 60000, // 밀리초 단위
+      limit: 10,
+    });
+  });
 });

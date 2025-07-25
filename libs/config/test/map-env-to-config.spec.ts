@@ -24,6 +24,10 @@ describe('mapEnvToConfig Unit Test', () => {
         profilesSampleRate: +env.SENTRY_PROFILES_SAMPLE_RATE,
         tracesSampleRate: +env.SENTRY_TRACES_SAMPLE_RATE,
       },
+      throttle: {
+        ttl: +env.THROTTLE_TTL, // 밀리초 단위
+        limit: +env.THROTTLE_LIMIT,
+      },
       db: {
         dbName: env.DB_NAME,
         host: env.DB_HOST,
