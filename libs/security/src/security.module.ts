@@ -3,8 +3,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtUserStrategy } from './jwt-user.strategy';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { config } from 'dotenv';
-
 @Global()
 @Module({
   imports: [
