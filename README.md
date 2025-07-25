@@ -1,5 +1,5 @@
 # nestjs-boilerplate
-NestJS 기반의 모노레포 프로젝트 보일러플레이트입니다.  
+NestJS Webpack 빌드 기반의 모노레포 프로젝트 보일러플레이트입니다.  
 효율적인 개발 환경, 일관된 코드 스타일, 확장성 있는 구조를 제공합니다.
 
 ## 주요 특징
@@ -11,16 +11,26 @@ NestJS 기반의 모노레포 프로젝트 보일러플레이트입니다.
 - 글로벌 예외/응답 처리: 일관된 에러 및 응답 포맷
 - JWT 인증 및 Guard: 사용자 인증 및 공개 API 데코레이터
 - 테스트 코드: 유닛/통합 테스트 예시 포함
+
+## 주요 라이브러리
+- NestJS
+- MikroORM
+- Sentry
+- Jest (테스트)
+- Pino
+
 ## 설치 및 실행
 ```sh
 # 의존성 설치
 npm install
 
 # 환경변수 파일 생성
-env/.env.test
 env/.env.development
 
 @libs/common에 존재하는 Environment 기반으로 환경에 맞는 파일 생성
+
+# 스키마
+npm run mikro-orm:schema:fresh -- --{run/dump} --{seed}
 
 # API 서버 실행
 NODE_ENV=development npm run start:api:dev
@@ -34,26 +44,29 @@ NODE_ENV=development npm run start:api:dev
 ## 로깅
 - `@nestjs/pino` 통합
 
-## 주요 라이브러리
-- NestJS
-- MikroORM
-- Sentry
-- Jest (테스트)
-- Pino
-
 ## 테스트
-```sh
-# 각 libs 폴더별 유닛/통합 테스트
-```
+- 각 libs 폴더별 유닛/통합 테스트
 
 ## 커스텀 유틸리티/데코레이터
 - @StringValidator, @NumberValidator, @DateValidator, @BooleanValidator, @ArrayValidator, @NestedValidator
 - AppException, AllCatchExceptionFilter, ResponseInterceptor
 - createUseClassProvider 등 Provider 유틸리티
 
+## Sentry
+- 프로젝트 root 위치에 .env.sentry-build-plugin 폴더를 만들고 Sentry 계정의 Organization Token을 SENTRY_AUTH_TOKEN 값으로 주세요.
+- 또는 process.env로 설정해주세요.
+
+```sh
+SENTRY_AUTH_TOKEN={{Organization Token}}
+```
+
 ## Swagger & API 문서
 - Swagger 설정 예시 포함 (`main.ts`)
 - API 문서 자동 생성 지원
+
+## Throttle
+- 필요하다면 ThrottleGuard 전역 설정
+- apps/api/test/app.e2e-spec.ts 참고
 
 ## 스타일
 - 코드 스타일: Prettier, ESLint 적용
