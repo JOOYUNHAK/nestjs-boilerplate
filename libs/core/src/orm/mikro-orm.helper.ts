@@ -10,6 +10,7 @@ import * as CoreEntities from '@libs/core/entity';
 import { OrmOptions } from '@libs/config';
 import { Environment } from '@libs/common';
 import { MikroOrmModuleAsyncOptions } from '@mikro-orm/nestjs';
+import { SeedManager } from '@mikro-orm/seeder';
 
 export const getRootAsyncOptions = (): MikroOrmModuleAsyncOptions => ({
   inject: [ConfigService],
@@ -73,8 +74,15 @@ export const getCliOrmConfig = () =>
       snapshot: true,
       emit: 'ts',
       transactional: true,
-      glob: '!(*.d).{ts}',
+      glob: '!(*.d).ts',
       generator: TSMigrationGenerator,
     },
-    extensions: [Migrator],
+    seeder: {
+      pathTs: join(process.cwd(), 'libs/core/src/orm/seeders'), // path to the folder with TS seeders
+      glob: '!(*.d).ts',
+      defaultSeeder: 'DatabaseSeeder',
+      emit: 'ts',
+      fileName: (className: string) => className,
+    },
+    extensions: [Migrator, SeedManager],
   });

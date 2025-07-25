@@ -6,6 +6,10 @@ export const configuration = () => ({
     secret: process.env.JWT_SECRET,
     expiresIn: process.env.JWT_EXPIRES_IN,
   },
+  throttle: {
+    ttl: +(process.env.THROTTLE_TTL as string), // 밀리초 단위
+    limit: +(process.env.THROTTLE_LIMIT as string),
+  },
   db: {
     dbName: process.env.DB_NAME,
     host: process.env.DB_HOST,

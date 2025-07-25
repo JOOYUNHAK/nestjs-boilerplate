@@ -7,6 +7,8 @@ const MOCK_ENV = {
   CORS_ORIGIN: 'localhost:3000',
   JWT_SECRET: 'test_jwt_secret',
   JWT_EXPIRES_IN: '1d',
+  THROTTLE_TTL: '60000', // 1분
+  THROTTLE_LIMIT: '10',
   SENTRY_DSN: 'test_sentry_dsn',
   SENTRY_PROFILES_SAMPLE_RATE: '0.1',
   SENTRY_TRACES_SAMPLE_RATE: '0.1',

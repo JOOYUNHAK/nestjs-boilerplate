@@ -30,6 +30,7 @@ async function bootstrap() {
     .setTitle('Swagger example')
     .setDescription('The test API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const documentFactory = () =>
