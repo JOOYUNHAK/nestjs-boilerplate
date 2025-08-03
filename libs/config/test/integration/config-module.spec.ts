@@ -46,7 +46,7 @@ describe('ConfigModule Integration Test', () => {
       password: 'postgres',
       driverOptions: {
         connection: {
-          statementTimeout: 30000,
+          statementTimeout: 10000,
         },
       },
       pool: {
@@ -87,6 +87,17 @@ describe('ConfigModule Integration Test', () => {
     expect(throttle).toStrictEqual({
       ttl: 60000, // 밀리초 단위
       limit: 10,
+    });
+  });
+
+  it('resend env value 확인', () => {
+    // when
+    const resend = configService.get('resend');
+
+    // then
+    expect(resend).toStrictEqual({
+      apiKey: 'test_resend_api_key',
+      from: 'onboarding@resend.dev',
     });
   });
 });

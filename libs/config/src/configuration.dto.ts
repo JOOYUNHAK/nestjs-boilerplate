@@ -9,6 +9,7 @@ import { OrmOptions } from './orm';
 import { JwtOptions } from './jwt/jwt-options';
 import { SentryOptions } from './sentry/sentry.options';
 import { ThrottleOptions } from './throttle/throttle.options';
+import { ResendOptions } from './resend/resend.options';
 
 export class ConfigurationDTO {
   @StringValidator({ enum: Environment })
@@ -40,4 +41,7 @@ export class ConfigurationDTO {
 
   @NestedValidator({ type: () => OrmOptions })
   db: OrmOptions;
+
+  @NestedValidator({ type: () => ResendOptions })
+  resend: ResendOptions;
 }

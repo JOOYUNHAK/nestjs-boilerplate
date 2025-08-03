@@ -41,5 +41,9 @@ export function mapEnvToConfig(env: Record<string, any>): ConfigurationDTO {
         acquireTimeoutMillis: +env.DB_POOL_ACQUIRE_TIMEOUT,
       },
     },
+    resend: {
+      apiKey: env.RESEND_API_KEY,
+      from: env.RESEND_FROM_EMAIL,
+    },
   };
 }
