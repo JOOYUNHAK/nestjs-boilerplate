@@ -10,7 +10,7 @@ class TestDto {
 describe('BooleanValidator', () => {
   describe('성공 케이스', () => {
     it.each([true, 'true'])(
-      '값이 %s인 경우 true를 반환해야 한다,',
+      '값이 %s인 경우 true를 반환해야 한다.',
       async (value: string | boolean) => {
         // given
         const dto = plainToInstance(TestDto, { value });
