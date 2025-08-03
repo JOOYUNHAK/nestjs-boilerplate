@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @ApiTags('test')
 @Controller('test')
@@ -27,6 +27,15 @@ export class ApiController {
   @Get('debug-throttle')
   debugThrottler() {
     return { message: 'Throttler 테스트 API 호출 성공' };
+  }
+
+  @ApiOperation({
+    summary: 'Email 테스트 Public API',
+    description: 'Email 테스트 API 입니다.',
+  })
+  @Post('debug-email')
+  debugEmail() {
+    return this.apiService.debugEmail();
   }
 
   @ApiOperation({
