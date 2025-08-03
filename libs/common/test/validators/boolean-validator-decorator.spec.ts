@@ -23,7 +23,6 @@ describe('BooleanValidator', () => {
       },
     );
 
-    // then
     it.each([false, 'false'])(
       '값이 %s인 경우 false를 반환해야 한다.',
       async (value: string | boolean) => {
