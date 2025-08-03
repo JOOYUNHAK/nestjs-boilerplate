@@ -9,6 +9,7 @@ import { SecurityModule } from '@libs/security/security.module';
 import { ConfigModule } from '@nestjs/config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { getRootAsyncOptions } from './orm';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { getRootAsyncOptions } from './orm';
     CoreLoggerModule,
     SecurityModule,
     SentryModule.forRoot(),
+    EmailModule,
   ],
   providers: [
     {
