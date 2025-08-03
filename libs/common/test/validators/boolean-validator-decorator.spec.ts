@@ -1,25 +1,57 @@
-import { DateValidator } from '@libs/common';
-import { validateSync } from 'class-validator';
+import { BooleanValidator } from '@libs/common';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 
-describe('DateValidatorDecorator Unit Test', () => {
-  it('날짜 에러 확인', () => {
-    class TestDTO {
-      @DateValidator()
-      date!: Date;
-    }
-    // given
-    const dto = Object.assign(new TestDTO(), { date: 'date' });
+class TestDto {
+  @BooleanValidator()
+  value: boolean;
+}
 
-    // when
-    const errors = validateSync(dto);
+describe('BooleanValidator', () => {
+  describe('성공 케이스', () => {
+    it.each([true, 'true'])(
+      '값이 %s인 경우 true를 반환해야 한다.',
+      async (value: string | boolean) => {
+        // given
+        const dto = plainToInstance(TestDto, { value });
 
-    // then
-    expect(errors).toHaveLength(1);
-    expect(errors.at(0)).toMatchObject({
-      property: 'date',
-      constraints: {
-        isDate: `date must be a Date`,
+        // when
+        const errors = await validate(dto);
+
+        // then
+        expect(errors.length).toBe(0);
       },
-    });
+    );
+
+    it.each([false, 'false'])(
+      '값이 %s인 경우 false를 반환해야 한다.',
+      async (value: string | boolean) => {
+        // given
+        const dto = plainToInstance(TestDto, { value });
+
+        // when
+        const errors = await validate(dto);
+
+        // then
+        expect(errors.length).toBe(0);
+      },
+    );
+  });
+
+  describe('실패 케이스', () => {
+    it.each([123, 'foo', {}, []])(
+      '값이 %s인 경우 실패해야 한다.',
+      async (value: unknown) => {
+        // given
+        const dto = plainToInstance(TestDto, { value });
+
+        // when
+        const errors = await validate(dto);
+
+        // then
+        expect(errors.length).toBeGreaterThan(0);
+        expect(errors[0].constraints).toHaveProperty('isBoolean');
+      },
+    );
   });
 });
