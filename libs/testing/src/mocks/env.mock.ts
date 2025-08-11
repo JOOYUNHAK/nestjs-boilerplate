@@ -22,6 +22,8 @@ const MOCK_ENV = {
   DB_POOL_MAX: '10',
   DB_POOL_IDLE_TIMEOUT: '5000',
   DB_POOL_ACQUIRE_TIMEOUT: '10000',
+  RESEND_API_KEY: 'test_resend_api_key',
+  RESEND_FROM_EMAIL: 'onboarding@resend.dev',
 };
 
 export const getMockEnv = () => MOCK_ENV;
