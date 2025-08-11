@@ -10,11 +10,19 @@ export class CoreLoggerService implements NestLoggerService {
   }
 
   warn(errorOrMessage: Error | string, data: Record<string, any> = {}) {
-    this.logger.error({ err: errorOrMessage, data });
+    if (errorOrMessage instanceof Error) {
+      this.logger.error({ err: errorOrMessage, data });
+      return;
+    }
+    this.logger.error({ data }, errorOrMessage);
   }
 
   error(errorOrMessage: Error | string, data: Record<string, any> = {}) {
-    this.logger.error({ err: errorOrMessage, data });
+    if (errorOrMessage instanceof Error) {
+      this.logger.error({ err: errorOrMessage, data });
+      return;
+    }
+    this.logger.error({ data }, errorOrMessage);
   }
 
   debug(message: string, data: Record<string, any> = {}) {
