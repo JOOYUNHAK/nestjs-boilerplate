@@ -11,7 +11,7 @@ export class CoreLoggerService implements NestLoggerService {
 
   warn(errorOrMessage: Error | string, data: Record<string, any> = {}) {
     if (errorOrMessage instanceof Error) {
-      this.logger.error({ err: errorOrMessage, data });
+      this.logger.warn({ err: errorOrMessage, data });
       return;
     }
     this.logger.error({ data }, errorOrMessage);
