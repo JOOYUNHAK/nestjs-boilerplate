@@ -59,6 +59,15 @@ services:
     networks:
       - nest-network
 
-networks:
-  nest-network:
-    driver: bridge
+  # Grafana (Visualization)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: nest-boilerplate-grafana
+    ports:
+      - "3001:3000" # NestJS가 3000을 쓰므로 Grafana는 3001로 매핑
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # 초기 비밀번호 admin
+    depends_on:
+      - prometheus
+    networks:
+      - nest-network
