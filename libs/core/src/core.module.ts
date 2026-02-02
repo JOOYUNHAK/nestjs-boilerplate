@@ -3,7 +3,7 @@ import { configuration, configValidateFn } from '@libs/config';
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { join } from 'path';
-import { CoreLoggerModule } from './logging/core-logger.module';
+import { SentryLoggerModule } from './logging/sentry-logger.module';
 import { SentryModule } from '@sentry/nestjs/setup';
 import { SecurityModule } from '@libs/security/security.module';
 import { ConfigModule } from '@nestjs/config';
@@ -20,7 +20,7 @@ import { EmailModule } from './email/email.module';
       envFilePath: [join(process.cwd(), 'env', `.env.${process.env.NODE_ENV}`)],
     }),
     MikroOrmModule.forRootAsync(getRootAsyncOptions()),
-    CoreLoggerModule,
+    SentryLoggerModule,
     SecurityModule,
     SentryModule.forRoot(),
     EmailModule,
