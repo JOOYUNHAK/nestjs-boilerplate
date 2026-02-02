@@ -1,0 +1,18 @@
+{
+	# 로컬 개발 환경용 자체 서명 인증서 사용
+	local_certs
+}
+
+http://localhost {
+	reverse_proxy api:3000
+}
+
+# Grafana (모니터링)
+http://localhost:3003 {
+	reverse_proxy grafana:3000
+}
+
+# Prometheus (메트릭)
+http://localhost:9091 {
+	reverse_proxy prometheus:9090
+}

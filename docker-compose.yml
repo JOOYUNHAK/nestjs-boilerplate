@@ -72,8 +72,31 @@ services:
     networks:
       - nest-network
 
+  # Caddy (Reverse Proxy)
+  caddy:
+    image: caddy:2-alpine
+    container_name: nest-boilerplate-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "3003:3003" # Grafana via Caddy
+      - "9091:9091" # Prometheus via Caddy
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+      - grafana
+      - prometheus
+    networks:
+      - nest-network
+
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:
 
 networks:
   nest-network:
