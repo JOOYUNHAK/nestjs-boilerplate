@@ -46,6 +46,32 @@ services:
     networks:
       - nest-network
 
+  # Prometheus (Monitoring)
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: nest-boilerplate-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - nest-network
+
+  # Grafana (Visualization)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: nest-boilerplate-grafana
+    ports:
+      - "3002:3000" # 포트 충돌 회피 (3001 -> 3002)
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # 초기 비밀번호 admin
+    depends_on:
+      - prometheus
+    networks:
+      - nest-network
+
 volumes:
   postgres_data:
 
