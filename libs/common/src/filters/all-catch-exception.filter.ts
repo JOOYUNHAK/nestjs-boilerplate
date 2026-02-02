@@ -1,10 +1,10 @@
-import { CoreLoggerService } from '@libs/core/logging/core-logger.service';
 import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UiMessages } from '../constants/ui-messages';
@@ -12,7 +12,7 @@ import { SentryExceptionCaptured } from '@sentry/nestjs';
 
 @Catch()
 export class AllCatchExceptionFilter implements ExceptionFilter {
-  constructor(private readonly logger: CoreLoggerService) {}
+  private readonly logger = new Logger(AllCatchExceptionFilter.name);
 
   @SentryExceptionCaptured()
   catch(exception: any, host: ArgumentsHost) {
