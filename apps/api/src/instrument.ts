@@ -11,6 +11,9 @@ dotenv.config({
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   integrations: [nodeProfilingIntegration()],
+  // [Wide Event] Sentry Logs 기능 활성화
+  // (SDK v9.41.0 이상에서 지원)
+  enableLogs: true,
   tracesSampleRate: +(process.env.SENTRY_TRACES_SAMPLE_RATE ?? 0.1),
   profilesSampleRate: +(process.env.SENTRY_PROFILES_SAMPLE_RATE ?? 0.1),
   environment: process.env.NODE_ENV,
