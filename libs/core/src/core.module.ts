@@ -22,7 +22,6 @@ import { EmailModule } from './email/email.module';
     MikroOrmModule.forRootAsync(getRootAsyncOptions()),
     SentryLoggerModule,
     SecurityModule,
-    SentryModule.forRoot(),
     PrometheusModule.register({
       path: '/metrics',
       defaultMetrics: {
