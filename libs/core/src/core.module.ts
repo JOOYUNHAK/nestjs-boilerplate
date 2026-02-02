@@ -4,7 +4,7 @@ import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { join } from 'path';
 import { SentryLoggerModule } from './logging/sentry-logger.module';
-import { SentryModule } from '@sentry/nestjs/setup';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { SecurityModule } from '@libs/security/security.module';
 import { ConfigModule } from '@nestjs/config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
@@ -23,6 +23,12 @@ import { EmailModule } from './email/email.module';
     SentryLoggerModule,
     SecurityModule,
     SentryModule.forRoot(),
+    PrometheusModule.register({
+      path: '/metrics',
+      defaultMetrics: {
+        enabled: true,
+      },
+    }),
     EmailModule,
   ],
   providers: [
