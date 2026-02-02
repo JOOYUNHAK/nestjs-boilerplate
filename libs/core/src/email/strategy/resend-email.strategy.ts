@@ -1,25 +1,24 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { EmailService } from '../email.service';
 import { EmailPayload } from '../email.type';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 import { ResendOptions } from '@libs/config';
-import { CoreLoggerService } from '@libs/core/logging/core-logger.service';
 
 @Injectable()
 export class ResendEmailStrategy implements EmailService {
   private readonly resend: Resend;
   private readonly from: string;
+  private readonly logger = new Logger(ResendEmailStrategy.name);
 
-  constructor(
-    configService: ConfigService,
-    private readonly logger: CoreLoggerService,
-  ) {
+  constructor(configService: ConfigService) {
     const { apiKey, from } = configService.getOrThrow<ResendOptions>('resend');
     this.resend = new Resend(apiKey);
     this.from = from;
-
-    this.logger.setContext(ResendEmailStrategy.name);
   }
 
   async send(payload: EmailPayload): Promise<void> {

@@ -3,10 +3,10 @@ import { NestFactory } from '@nestjs/core';
 import { ApiModule } from './api.module';
 import { ValidationPipe } from '@nestjs/common';
 import { getValidationPipeOptions } from '@libs/common';
-import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SentryLoggerService } from '@libs/core';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiModule, { bufferLogs: true });
@@ -16,7 +16,9 @@ async function bootstrap() {
   app.use(helmet());
 
   app.useGlobalPipes(new ValidationPipe(getValidationPipeOptions()));
-  app.useLogger(app.get(Logger));
+
+  // [수정] nestjs-pino 대신 Custom Sentry Logger 사용
+  app.useLogger(new SentryLoggerService());
 
   const configService = app.get(ConfigService);
 
