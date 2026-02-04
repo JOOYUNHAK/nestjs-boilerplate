@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # Main API Application
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-boilerplate-api
+    ports:
+      - '${PORT:-3000}:${PORT:-3000}' # Host:Container
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_DATABASE=${DB_DATABASE:-nestjs_boilerplate}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:api:dev
+    networks:
+      - nest-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: nest-boilerplate-postgres
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_DATABASE:-nestjs_boilerplate}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-nestjs_boilerplate}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nest-network
+
+  # Prometheus (Monitoring)
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: nest-boilerplate-prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - nest-network
+
+  # Grafana (Visualization)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: nest-boilerplate-grafana
+    ports:
+      - '3002:3000' # 포트 충돌 회피 (3001 -> 3002)
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # 초기 비밀번호 admin
+    depends_on:
+      - prometheus
+    networks:
+      - nest-network
+
+  # Caddy (Reverse Proxy)
+  caddy:
+    image: caddy:2-alpine
+    container_name: nest-boilerplate-caddy
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '3003:3003' # Grafana via Caddy
+      - '9091:9091' # Prometheus via Caddy
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+      - grafana
+      - prometheus
+    networks:
+      - nest-network
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  nest-network:
+    driver: bridge

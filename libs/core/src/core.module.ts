@@ -3,8 +3,8 @@ import { configuration, configValidateFn } from '@libs/config';
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { join } from 'path';
-import { CoreLoggerModule } from './logging/core-logger.module';
-import { SentryModule } from '@sentry/nestjs/setup';
+import { SentryLoggerModule } from './logging/sentry-logger.module';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { SecurityModule } from '@libs/security/security.module';
 import { ConfigModule } from '@nestjs/config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
@@ -20,9 +20,15 @@ import { EmailModule } from './email/email.module';
       envFilePath: [join(process.cwd(), 'env', `.env.${process.env.NODE_ENV}`)],
     }),
     MikroOrmModule.forRootAsync(getRootAsyncOptions()),
-    CoreLoggerModule,
+    SentryLoggerModule,
+    SentryLoggerModule,
     SecurityModule,
-    SentryModule.forRoot(),
+    PrometheusModule.register({
+      path: '/metrics',
+      defaultMetrics: {
+        enabled: true,
+      },
+    }),
     EmailModule,
   ],
   providers: [
