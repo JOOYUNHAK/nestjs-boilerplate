@@ -39,6 +39,26 @@ export class ApiController {
   }
 
   @ApiOperation({
+    summary: 'CPU 프로파일링 시작',
+    description: 'CPU 프로파일링을 시작합니다. (inspector session 연결)',
+  })
+  @Post('debug-cpu/start')
+  async startCpuProfile() {
+    return { message: await this.apiService.startCpuProfile() };
+  }
+
+  @ApiOperation({
+    summary: 'CPU 프로파일링 종료',
+    description:
+      'CPU 프로파일링을 종료하고 서버 루트에 .cpuprofile 파일을 저장합니다.',
+  })
+  @Post('debug-cpu/stop')
+  async stopCpuProfile() {
+    const path = await this.apiService.stopCpuProfile();
+    return { message: 'Profiling stopped', path };
+  }
+
+  @ApiOperation({
     summary: '테스트 API',
     description: '테스트를 위한 API입니다.',
   })
