@@ -23,7 +23,7 @@ export class User extends BaseEntity {
   @Property({ type: 'varchar', length: 100, nullable: true, unique: true })
   naverId?: string;
 
-  @Enum(() => AuthProvider)
+  @Enum({ items: () => AuthProvider, type: 'string' })
   provider!: AuthProvider;
 
   constructor(
