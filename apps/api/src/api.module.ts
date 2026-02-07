@@ -9,9 +9,10 @@ import { createUseClassProvider } from '@libs/common';
 import { ApiRepositoryImpl, ApiRepositoryToken } from './api.repository';
 import { PoolController } from './pool/pool.controller';
 import { HealthController } from './health/health.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [CoreModule, MikroOrmModule.forFeature([User])],
+  imports: [CoreModule, MikroOrmModule.forFeature([User]), AuthModule],
   controllers: [ApiController, PoolController, HealthController],
   providers: [
     ApiService,

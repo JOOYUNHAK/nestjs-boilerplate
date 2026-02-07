@@ -1,4 +1,8 @@
-import { AllCatchExceptionFilter, ResponseInterceptor } from '@libs/common';
+import {
+  AllCatchExceptionFilter,
+  createUseClassProvider,
+  ResponseInterceptor,
+} from '@libs/common';
 import { configuration, configValidateFn } from '@libs/config';
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import {
@@ -17,6 +21,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { getRootAsyncOptions } from './orm';
 import { EmailModule } from './email/email.module';
 import { PoolMonitorModule } from './orm/pool-monitor.module';
+import { USER_REPOSITORY, UserRepository } from './repository/user';
 
 @Module({
   imports: [
@@ -61,6 +66,8 @@ import { PoolMonitorModule } from './orm/pool-monitor.module';
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
     },
+    createUseClassProvider(USER_REPOSITORY, UserRepository),
   ],
+  exports: [USER_REPOSITORY],
 })
 export class CoreModule {}

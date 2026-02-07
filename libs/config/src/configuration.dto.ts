@@ -10,6 +10,7 @@ import { JwtOptions } from './jwt/jwt-options';
 import { SentryOptions } from './sentry/sentry.options';
 import { ThrottleOptions } from './throttle/throttle.options';
 import { ResendOptions } from './resend/resend.options';
+import { NaverOAuthOptions } from './naver/naver-oauth.options';
 
 export class ConfigurationDTO {
   @StringValidator({ enum: Environment })
@@ -44,4 +45,7 @@ export class ConfigurationDTO {
 
   @NestedValidator({ type: () => ResendOptions })
   resend: ResendOptions;
+
+  @NestedValidator({ type: () => NaverOAuthOptions })
+  naver: NaverOAuthOptions;
 }

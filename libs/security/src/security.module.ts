@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtUserStrategy } from './jwt-user.strategy';
+import { NaverStrategy } from './naver.strategy';
 import { ThrottlerModule } from '@nestjs/throttler';
 @Global()
 @Module({
@@ -28,7 +29,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
       }),
     }),
   ],
-  providers: [JwtUserStrategy],
-  exports: [JwtUserStrategy],
+  providers: [JwtUserStrategy, NaverStrategy],
+  exports: [JwtUserStrategy, NaverStrategy],
 })
 export class SecurityModule {}
