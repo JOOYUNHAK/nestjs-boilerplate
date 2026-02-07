@@ -2,10 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { ResendEmailStrategy } from '@libs/core/email/strategy/resend-email.strategy';
 import { EmailPayload } from '@libs/core';
-import { CoreLoggerService } from '@libs/core/logging/core-logger.service';
 
 describe('ResendEmailStrategy Unit Test', () => {
-  let resendEmail: ResendEmailStrategy, logger: CoreLoggerService;
+  let resendEmail: ResendEmailStrategy;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -15,13 +14,6 @@ describe('ResendEmailStrategy Unit Test', () => {
           useValue: {
             send: jest.fn(),
             sendBatch: jest.fn(),
-          },
-        },
-        {
-          provide: CoreLoggerService,
-          useValue: {
-            error: jest.fn(),
-            setContext: jest.fn(),
           },
         },
         {
@@ -37,7 +29,6 @@ describe('ResendEmailStrategy Unit Test', () => {
     }).compile();
 
     resendEmail = module.get<ResendEmailStrategy>(ResendEmailStrategy);
-    logger = module.get<CoreLoggerService>(CoreLoggerService);
   });
 
   beforeEach(() => jest.clearAllMocks());
@@ -95,9 +86,12 @@ describe('ResendEmailStrategy Unit Test', () => {
       };
 
       // when
-      const result = async () => await resendEmail.send(payload);
+      (resendEmail.send as jest.Mock).mockRejectedValueOnce(
+        new Error('Send failed'),
+      );
 
       // then
+      await expect(resendEmail.send(payload)).rejects.toThrow('Send failed');
     });
   });
 

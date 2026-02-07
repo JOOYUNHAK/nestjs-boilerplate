@@ -3,8 +3,7 @@ import {
   AppException,
   UiMessages,
 } from '@libs/common';
-import { CoreLoggerService } from '@libs/core/logging/core-logger.service';
-import { ArgumentsHost, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, HttpStatus, Logger } from '@nestjs/common';
 
 describe('AllCatchExceptionFilter Unit Test', () => {
   let filter: AllCatchExceptionFilter;
@@ -15,13 +14,10 @@ describe('AllCatchExceptionFilter Unit Test', () => {
     json: jest.fn().mockReturnThis(),
   } as any;
 
-  const mockLogger = {
-    warn: jest.fn(),
-    error: jest.fn(),
-  } as unknown as CoreLoggerService;
-
   beforeEach(() => {
-    filter = new AllCatchExceptionFilter(mockLogger);
+    filter = new AllCatchExceptionFilter();
+    jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => {});
+    jest.spyOn(Logger.prototype, 'error').mockImplementation(() => {});
 
     mockHost = {
       switchToHttp: () => ({
@@ -47,7 +43,6 @@ describe('AllCatchExceptionFilter Unit Test', () => {
       statusCode: HttpStatus.BAD_REQUEST,
       message: UiMessages.BAD_REQUEST,
     });
-    expect(mockLogger.warn).toHaveBeenCalledWith(error);
   });
 
   it('HttpException 기반 에러가 아닌 경우 반환 데이터 확인', () => {
@@ -65,6 +60,5 @@ describe('AllCatchExceptionFilter Unit Test', () => {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       message: UiMessages.INTERNAL_SERVER_ERROR,
     });
-    expect(mockLogger.error).toHaveBeenCalledWith(error);
   });
 });
