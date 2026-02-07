@@ -74,9 +74,10 @@ describe('ConfigModule Integration Test', () => {
     const sentry = configService.get('sentry');
 
     // then
-    // sentry는 main.ts에서 configModule이 로드되기 전 구성되므로
-    // key값들을 등록하지 않고 validation을 통과하는지만 확인됩니다.
-    expect(sentry).toBeUndefined();
+    expect(sentry).toBeDefined();
+    expect(sentry).toHaveProperty('dsn');
+    expect(sentry).toHaveProperty('tracesSampleRate');
+    expect(sentry).toHaveProperty('profilesSampleRate');
   });
 
   it('throttle env value 확인', () => {

@@ -7,10 +7,12 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { User } from '@libs/core/entity';
 import { createUseClassProvider } from '@libs/common';
 import { ApiRepositoryImpl, ApiRepositoryToken } from './api.repository';
+import { PoolController } from './pool/pool.controller';
+import { HealthController } from './health/health.controller';
 
 @Module({
   imports: [CoreModule, MikroOrmModule.forFeature([User])],
-  controllers: [ApiController],
+  controllers: [ApiController, PoolController, HealthController],
   providers: [
     ApiService,
     createUseClassProvider(ApiRepositoryToken, ApiRepositoryImpl),

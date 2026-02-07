@@ -1,13 +1,23 @@
-import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Version,
+} from '@nestjs/common';
 import { ApiService } from './api.service';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { Public } from '@libs/security';
 
 @ApiTags('test')
 @Controller('test')
+@Public()
 export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 
+  @Version('1')
   @ApiOperation({
     summary: 'Sentry 테스트 Public API',
     description:
@@ -18,6 +28,7 @@ export class ApiController {
     return this.apiService.debugSentry();
   }
 
+  @Version('1')
   @ApiOperation({
     summary: 'Throttle 테스트 Public API',
     description:
@@ -29,6 +40,7 @@ export class ApiController {
     return { message: 'Throttler 테스트 API 호출 성공' };
   }
 
+  @Version('1')
   @ApiOperation({
     summary: 'Email 테스트 Public API',
     description: 'Email 테스트 API 입니다.',
@@ -38,6 +50,7 @@ export class ApiController {
     return this.apiService.debugEmail();
   }
 
+  @Version('1')
   @ApiOperation({
     summary: 'CPU 프로파일링 시작',
     description: 'CPU 프로파일링을 시작합니다. (inspector session 연결)',
@@ -47,6 +60,7 @@ export class ApiController {
     return { message: await this.apiService.startCpuProfile() };
   }
 
+  @Version('1')
   @ApiOperation({
     summary: 'CPU 프로파일링 종료',
     description:
@@ -58,6 +72,7 @@ export class ApiController {
     return { message: 'Profiling stopped', path };
   }
 
+  @Version('1')
   @ApiOperation({
     summary: '테스트 API',
     description: '테스트를 위한 API입니다.',
@@ -68,6 +83,7 @@ export class ApiController {
     return this.apiService.getHello();
   }
 
+  @Version('1')
   @ApiOperation({
     summary: '테스트 API',
     description: '테스트를 위한 API입니다.',

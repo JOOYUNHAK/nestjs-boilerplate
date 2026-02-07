@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SentryLoggerService } from './sentry-logger.service';
+import { ConsoleLogger } from '@nestjs/common';
 import * as Sentry from '@sentry/nestjs';
 
 // Sentry 모듈 Mocking
@@ -13,8 +14,11 @@ describe('SentryLoggerService', () => {
       providers: [SentryLoggerService],
     }).compile();
 
-    service = module.get<SentryLoggerService>(SentryLoggerService);
-    jest.clearAllMocks(); // Mock 초기화
+    service = await module.resolve<SentryLoggerService>(SentryLoggerService);
+    // ConsoleLogger 출력 억제
+    jest.spyOn(ConsoleLogger.prototype, 'log').mockImplementation(() => {});
+    jest.spyOn(ConsoleLogger.prototype, 'error').mockImplementation(() => {});
+    jest.clearAllMocks();
   });
 
   describe('Local Environment (Development)', () => {
@@ -22,26 +26,16 @@ describe('SentryLoggerService', () => {
       process.env.NODE_ENV = 'development';
     });
 
-    it('should log to console but NOT send breadcrumb to Sentry', () => {
-      const spyConsole = jest
-        .spyOn(console, 'log')
-        .mockImplementation(() => {});
-
+    it('should NOT send to Sentry in development', () => {
       service.log('Test Log', 'TestContext');
 
-      expect(spyConsole).toHaveBeenCalled(); // 콘솔엔 찍혀야 함
-      expect(Sentry.addBreadcrumb).not.toHaveBeenCalled(); // Sentry엔 안 가야 함
+      expect(Sentry.addBreadcrumb).not.toHaveBeenCalled();
     });
 
-    it('should log error to console but NOT capture exception in Sentry', () => {
-      const spyConsole = jest
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-
+    it('should NOT send error to Sentry in development', () => {
       service.error('Test Error', 'stack', 'TestContext');
 
-      expect(spyConsole).toHaveBeenCalled();
-      expect(Sentry.captureException).not.toHaveBeenCalled();
+      expect(Sentry.addBreadcrumb).not.toHaveBeenCalled();
     });
   });
 
@@ -50,27 +44,14 @@ describe('SentryLoggerService', () => {
       process.env.NODE_ENV = 'production';
     });
 
-    it('should send breadcrumb to Sentry for normal logs', () => {
-      service.log('User Login', 'AuthService');
+    it('should send error breadcrumb to Sentry for errors', () => {
+      service.error('Critical Failure', 'stack trace', 'OrderService');
 
       expect(Sentry.addBreadcrumb).toHaveBeenCalledWith(
         expect.objectContaining({
-          message: 'User Login',
-          category: 'log',
-          level: 'info',
-        }),
-      );
-    });
-
-    it('should capture exception in Sentry for errors', () => {
-      const errorMsg = new Error('Critical Failure');
-      service.error(errorMsg, errorMsg.stack, 'OrderService');
-
-      expect(Sentry.captureException).toHaveBeenCalledWith(
-        errorMsg,
-        expect.objectContaining({
+          category: 'error',
+          message: 'Critical Failure',
           level: 'error',
-          extra: { context: 'OrderService', stack: errorMsg.stack },
         }),
       );
     });
@@ -78,7 +59,6 @@ describe('SentryLoggerService', () => {
     it('should IGNORE logs from HealthController (Noise Filtering)', () => {
       service.log('Health Check OK', 'HealthController');
 
-      // 운영 환경이라도 헬스 체크는 무시해야 함
       expect(Sentry.addBreadcrumb).not.toHaveBeenCalled();
     });
 

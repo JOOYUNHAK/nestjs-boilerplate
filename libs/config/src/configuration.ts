@@ -32,4 +32,9 @@ export const configuration = () => ({
     apiKey: process.env.RESEND_API_KEY,
     from: process.env.RESEND_FROM_EMAIL,
   },
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
+    tracesSampleRate: +(process.env.SENTRY_TRACES_SAMPLE_RATE as string),
+    profilesSampleRate: +(process.env.SENTRY_PROFILES_SAMPLE_RATE as string),
+  },
 });
