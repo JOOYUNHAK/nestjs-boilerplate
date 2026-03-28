@@ -5,7 +5,7 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { getValidationPipeOptions } from '@libs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
-import cookieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SentryLoggerService } from '@libs/core';
 

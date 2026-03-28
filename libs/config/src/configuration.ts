@@ -37,4 +37,9 @@ export const configuration = () => ({
     tracesSampleRate: +(process.env.SENTRY_TRACES_SAMPLE_RATE as string),
     profilesSampleRate: +(process.env.SENTRY_PROFILES_SAMPLE_RATE as string),
   },
+  naver: {
+    clientId: process.env.NAVER_CLIENT_ID,
+    clientSecret: process.env.NAVER_CLIENT_SECRET,
+    callbackUrl: process.env.NAVER_CALLBACK_URL,
+  },
 });

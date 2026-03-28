@@ -68,6 +68,6 @@ import { USER_REPOSITORY, UserRepository } from './repository/user';
     },
     createUseClassProvider(USER_REPOSITORY, UserRepository),
   ],
-  exports: [USER_REPOSITORY],
+  exports: [USER_REPOSITORY, PoolMonitorModule],
 })
 export class CoreModule {}
