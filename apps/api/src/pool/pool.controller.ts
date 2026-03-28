@@ -1,11 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PoolMetricsService } from '@libs/core';
-import { Public } from '@libs/security';
+import { PublicApi } from '@libs/security';
 
 @ApiTags('monitoring')
 @Controller('pool')
-@Public()
+@PublicApi()
 export class PoolController {
   constructor(private readonly poolMetrics: PoolMetricsService) {}
 

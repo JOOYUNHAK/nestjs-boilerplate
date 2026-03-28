@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
-import { AuthProvider, User } from '../../entity/user/user.entity';
+import { AuthProvider } from '../../entity/user/auth-provider.enum';
+import { User } from '../../entity/user/user.entity';
 import { IUserRepository } from './user.repository.interface';
 
 @Injectable()

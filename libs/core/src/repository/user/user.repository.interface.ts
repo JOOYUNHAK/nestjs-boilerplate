@@ -1,4 +1,5 @@
-import { AuthProvider, User } from '../../entity/user/user.entity';
+import { AuthProvider } from '../../entity/user/auth-provider.enum';
+import { User } from '../../entity/user/user.entity';
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
 

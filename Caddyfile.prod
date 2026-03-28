@@ -1,0 +1,85 @@
+{
+	# [운영용] 실제 도메인 사용 시 이메일 설정 (Let's Encrypt SSL 자동 발급)
+	email admin@your-domain.com
+}
+
+# ======================================================================
+# 1. Main API Service
+# [중요] 실제 도메인으로 변경하세요 (예: api.example.com)
+# ======================================================================
+your-domain.com {
+	reverse_proxy api:3000
+
+	# Security headers
+	header {
+		# Enable HSTS
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		# Prevent clickjacking
+		X-Frame-Options "DENY"
+		# Prevent MIME type sniffing
+		X-Content-Type-Options "nosniff"
+		# XSS Protection
+		X-XSS-Protection "1; mode=block"
+		# Referrer Policy
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# Remove Server header
+		-Server
+	}
+
+	# Rate limiting (optional, requires Caddy plugin)
+	# rate_limit {
+	#     zone dynamic {
+	#         key {remote_host}
+	#         events 100
+	#         window 1m
+	#     }
+	# }
+
+	# Logging
+	log {
+		output file /var/log/caddy/api.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+	}
+}
+
+# ======================================================================
+# 2. Grafana Dashboard (모니터링용 - 내부망 전용 권장)
+# [중요] basicauth로 보호하거나 내부망에서만 접근 가능하도록 설정
+# ======================================================================
+monitor.your-domain.com {
+	reverse_proxy grafana:3000
+
+	# Basic Auth (예시)
+	# basicauth {
+	#     admin $2a$14$...hashed-password...
+	# }
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+}
+
+# ======================================================================
+# 3. Prometheus (메트릭 수집 - 내부망 전용 강력 권장)
+# [경고] 운영 환경에서는 외부 노출 금지!
+# ======================================================================
+metrics.your-domain.com {
+	reverse_proxy prometheus:9090
+
+	# Basic Auth 필수!
+	basicauth {
+		admin JDJhJDE0JEFCQzEyMy4uLmhhc2hlZC1wYXNzd29yZC4uLg==
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Frame-Options "DENY"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+}

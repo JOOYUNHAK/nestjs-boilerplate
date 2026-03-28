@@ -1,10 +1,6 @@
 import { Entity, Enum, Property } from '@mikro-orm/core';
 import { BaseEntity } from '../base.entity';
-
-export enum AuthProvider {
-  LOCAL = 'LOCAL',
-  NAVER = 'NAVER',
-}
+import { AuthProvider } from './auth-provider.enum';
 
 @Entity()
 export class User extends BaseEntity {

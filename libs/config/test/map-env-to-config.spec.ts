@@ -50,6 +50,11 @@ describe('mapEnvToConfig Unit Test', () => {
         apiKey: env.RESEND_API_KEY,
         from: env.RESEND_FROM_EMAIL,
       },
+      naver: {
+        clientId: env.NAVER_CLIENT_ID,
+        clientSecret: env.NAVER_CLIENT_SECRET,
+        callbackUrl: env.NAVER_CALLBACK_URL,
+      },
     });
   });
 });

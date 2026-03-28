@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { IUserRepository, USER_REPOSITORY } from '@libs/core/repository/user';
-import { AuthProvider } from '@libs/core/entity/user/user.entity';
+import { AuthProvider } from '@libs/core/entity/user/auth-provider.enum';
 import { NaverProfile } from '@libs/security';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,7 +21,7 @@ export class AuthService {
     if (!user) {
       user = await this.userRepository.create(
         uuidv4(),
-        profile.nickname,
+        profile.nickname ?? '',
         AuthProvider.NAVER,
         {
           email: profile.email,
