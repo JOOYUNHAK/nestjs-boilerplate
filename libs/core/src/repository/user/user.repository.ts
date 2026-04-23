@@ -12,6 +12,10 @@ export class UserRepository implements IUserRepository {
     return this.em.findOne(User, { naverId });
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    return this.em.findOne(User, { email });
+  }
+
   async create(
     uuid: string,
     nickname: string,
@@ -20,6 +24,7 @@ export class UserRepository implements IUserRepository {
       phoneNumber?: string;
       email?: string;
       naverId?: string;
+      password?: string;
     },
   ): Promise<User> {
     const user = new User(
@@ -29,6 +34,7 @@ export class UserRepository implements IUserRepository {
       options?.phoneNumber,
       options?.email,
       options?.naverId,
+      options?.password,
     );
     await this.em.persistAndFlush(user);
     return user;

@@ -1,4 +1,5 @@
 import { Entity, Enum, Property } from '@mikro-orm/core';
+import { Exclude } from 'class-transformer';
 import { BaseEntity } from '../base.entity';
 import { AuthProvider } from './auth-provider.enum';
 
@@ -16,6 +17,10 @@ export class User extends BaseEntity {
   @Property({ type: 'varchar', length: 255, nullable: true })
   email?: string;
 
+  @Exclude()
+  @Property({ type: 'varchar', length: 255, nullable: true, hidden: true })
+  password?: string;
+
   @Property({ type: 'varchar', length: 100, nullable: true, unique: true })
   naverId?: string;
 
@@ -29,6 +34,7 @@ export class User extends BaseEntity {
     phoneNumber?: string,
     email?: string,
     naverId?: string,
+    password?: string,
   ) {
     super();
     this.uuid = uuid;
@@ -37,5 +43,6 @@ export class User extends BaseEntity {
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.naverId = naverId;
+    this.password = password;
   }
 }
