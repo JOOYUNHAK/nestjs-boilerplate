@@ -1,13 +1,43 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { NaverGuard, NaverProfile, PublicApi } from '@libs/security';
-import { AuthService } from './auth.service';
+import { ApiStandardResponse } from '@libs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthService } from './auth.service';
+import { SignupRequestDto } from './dto/signup-request.dto';
+import { LoginRequestDto } from './dto/login-request.dto';
+import { AuthResponseDto } from './dto/auth-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @ApiOperation({ summary: '이메일 회원가입' })
+  @ApiStandardResponse(AuthResponseDto)
+  @PublicApi()
+  @Post('signup')
+  async signup(@Body() dto: SignupRequestDto): Promise<AuthResponseDto> {
+    const token = await this.authService.signup(dto);
+    return new AuthResponseDto(token);
+  }
+
+  @ApiOperation({ summary: '이메일 로그인' })
+  @ApiStandardResponse(AuthResponseDto)
+  @PublicApi()
+  @Post('login')
+  async login(@Body() dto: LoginRequestDto): Promise<AuthResponseDto> {
+    const token = await this.authService.login(dto);
+    return new AuthResponseDto(token);
+  }
 
   @ApiOperation({ summary: '네이버 로그인' })
   @PublicApi()
