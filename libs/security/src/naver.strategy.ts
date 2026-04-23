@@ -5,8 +5,8 @@ import { Strategy, Profile } from 'passport-naver-v2';
 
 export interface NaverProfile {
   id: string;
-  email: string;
-  nickname: string;
+  email?: string;
+  nickname?: string;
 }
 
 @Injectable()

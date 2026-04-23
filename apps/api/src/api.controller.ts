@@ -9,11 +9,11 @@ import {
 import { ApiService } from './api.service';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { Public } from '@libs/security';
+import { PublicApi } from '@libs/security';
 
 @ApiTags('test')
 @Controller('test')
-@Public()
+@PublicApi()
 export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 

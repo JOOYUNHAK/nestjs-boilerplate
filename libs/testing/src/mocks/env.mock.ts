@@ -24,6 +24,9 @@ const MOCK_ENV = {
   DB_POOL_ACQUIRE_TIMEOUT: '10000',
   RESEND_API_KEY: 'test_resend_api_key',
   RESEND_FROM_EMAIL: 'onboarding@resend.dev',
+  NAVER_CLIENT_ID: 'test_naver_client_id',
+  NAVER_CLIENT_SECRET: 'test_naver_client_secret',
+  NAVER_CALLBACK_URL: 'http://localhost:3000/auth/naver/callback',
 };
 
 export const getMockEnv = () => MOCK_ENV;

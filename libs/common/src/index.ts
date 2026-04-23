@@ -6,3 +6,5 @@ export * from './enums';
 export * from './utils';
 export * from './constants/ui-messages';
 export * from './errors/app.exception';
+export * from './decorators';
+export * from './dto';

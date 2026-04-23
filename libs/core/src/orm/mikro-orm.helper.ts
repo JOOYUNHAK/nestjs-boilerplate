@@ -66,7 +66,7 @@ export const getCliOrmConfig = () =>
     forceUtcTimezone: false,
     namingStrategy: UnderscoreNamingStrategy,
     debug: true,
-    entities: Object.values(CoreEntities),
+    entities: Object.values(CoreEntities).filter(v => typeof v === 'function'),
     entitiesTs: undefined,
     migrations: {
       tableName: 'mikro_orm_migrations',

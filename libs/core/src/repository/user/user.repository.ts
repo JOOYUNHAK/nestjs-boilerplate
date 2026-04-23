@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
-import { AuthProvider, User } from '../../entity/user/user.entity';
+import { AuthProvider } from '../../entity/user/auth-provider.enum';
+import { User } from '../../entity/user/user.entity';
 import { IUserRepository } from './user.repository.interface';
 
 @Injectable()
@@ -11,6 +12,10 @@ export class UserRepository implements IUserRepository {
     return this.em.findOne(User, { naverId });
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    return this.em.findOne(User, { email });
+  }
+
   async create(
     uuid: string,
     nickname: string,
@@ -19,6 +24,7 @@ export class UserRepository implements IUserRepository {
       phoneNumber?: string;
       email?: string;
       naverId?: string;
+      password?: string;
     },
   ): Promise<User> {
     const user = new User(
@@ -28,6 +34,7 @@ export class UserRepository implements IUserRepository {
       options?.phoneNumber,
       options?.email,
       options?.naverId,
+      options?.password,
     );
     await this.em.persistAndFlush(user);
     return user;
